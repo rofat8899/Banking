@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,9 +21,9 @@ public class Security {
     private String securityCode;
     private int userId;
     private int numberGenerate;
-    private Date modifiedOn;
+    private LocalDateTime modifiedOn;
     private String modifiedBy;
-    private Date createdOn;
+    private LocalDateTime createdOn;
     private String createdBy;
 
 }

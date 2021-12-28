@@ -9,7 +9,8 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
 @Service
@@ -29,7 +30,8 @@ public class SecurityServiceImp implements SecurityService{
         Boolean validate = userService.validation(userId,userPin);
         User user = userService.getUserByUserId(userId);
         Security existedsecurity = securityRepo.getSecurityByUserId(userId);
-        Date date = new Date();
+        LocalDateTime datetime = LocalDateTime.now();
+
         Random rnd = new Random();
         int ranNum = rnd.nextInt(999999);
         String securityCode = String.valueOf(ranNum);
@@ -46,7 +48,7 @@ public class SecurityServiceImp implements SecurityService{
                 security.setSecurityCode(encryptedPassword);
                 security.setUserId(existedsecurity.getUserId());
                 security.setNumberGenerate(0);
-                security.setModifiedOn(date);
+                security.setModifiedOn(datetime);
                 security.setModifiedBy(user.getName());
                 security.setCreatedOn(existedsecurity.getCreatedOn());
                 security.setCreatedBy(existedsecurity.getCreatedBy());
@@ -57,9 +59,9 @@ public class SecurityServiceImp implements SecurityService{
             {
                 security.setSecurityCode(encryptedPassword);
                 security.setUserId(user.getUserId());
-                security.setModifiedOn(date);
+                security.setModifiedOn(datetime);
                 security.setModifiedBy(user.getName());
-                security.setCreatedOn(date);
+                security.setCreatedOn(datetime);
                 security.setCreatedBy(user.getName());
                 System.out.format("You successfully generated the code !\nYour security code is %d\n",ranNum);
                 return securityRepo.save(security);
@@ -74,34 +76,43 @@ public class SecurityServiceImp implements SecurityService{
         Boolean existsUser = userRepo.existsByUserId(userId);
         Security security = securityRepo.getSecurityByUserId(userId);
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+        LocalDateTime now = LocalDateTime.now();
+        long diff = ChronoUnit.SECONDS.between(security.getModifiedOn(), now);
+
         if(!code.equals("") && userId != 0)
         {
             if(existsUser)
             {
-                if(security.getNumberGenerate()<5)
+                if(diff<600) // 10 minutes
                 {
-                    if (passwordEncryptor.checkPassword(code, security.getSecurityCode())) {
-                        System.out.println("Code accepted");
-                        return true;
+                    if(security.getNumberGenerate()<5)
+                    {
+                        if (passwordEncryptor.checkPassword(code, security.getSecurityCode())) {
+                            System.out.println("Code accepted");
+                            return true;
 
-                    } else {
-                        int numGen = security.getNumberGenerate();
-                        security.setNumberGenerate(numGen+1);
-                        securityRepo.save(security);
-                        System.out.println("Code is incorrect");
-                        System.out.format("You have %d attempted\n",security.getNumberGenerate());
+                        } else {
+                            int numGen = security.getNumberGenerate();
+                            security.setNumberGenerate(numGen+1);
+                            securityRepo.save(security);
+                            System.out.println("Code is incorrect");
+                            System.out.format("You have %d attempted\n",security.getNumberGenerate());
+                        }
+                    }
+                    else
+                    {
+                        System.out.format("You have reached (%d) limit attempt.\n",security.getNumberGenerate());
                     }
                 }
-                else
-                {
-                    System.out.format("You have reached (%d) limit attempt.\n",security.getNumberGenerate());
+                else{
+                    System.out.println("Code expired.");
                 }
 
             }
             else {
                 System.out.println("User is not exist");
             }
-            
+
         }
         else
         {

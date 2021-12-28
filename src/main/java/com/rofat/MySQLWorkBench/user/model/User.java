@@ -1,5 +1,6 @@
 package com.rofat.MySQLWorkBench.user.model;
 
+import com.rofat.MySQLWorkBench.user.constant.Role;
 import com.rofat.MySQLWorkBench.user.constant.Sex;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,8 @@ public class User {
     private int age;        //Age
 
     private int defaultAccount; // default account
+
+    private Role role;
 
     @OneToOne(cascade = CascadeType.ALL)
     private UserAddress address; //Address Table
