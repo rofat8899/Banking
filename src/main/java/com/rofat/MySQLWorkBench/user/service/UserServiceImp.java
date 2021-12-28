@@ -57,7 +57,7 @@ public class UserServiceImp implements UserService {
         if(existsUser)
         {
             if (passwordEncryptor.checkPassword(pin, pin1.getPin())) {
-                System.out.println("Validated");
+                System.out.println("User is validated");
                 return true;
 
             } else {

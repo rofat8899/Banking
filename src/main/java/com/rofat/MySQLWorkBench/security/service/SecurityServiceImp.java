@@ -50,18 +50,18 @@ public class SecurityServiceImp implements SecurityService{
                 security.setModifiedBy(user.getName());
                 security.setCreatedOn(existedsecurity.getCreatedOn());
                 security.setCreatedBy(existedsecurity.getCreatedBy());
-                System.out.format("You successfully regenerated the code !\n Your new security code is %d\n",ranNum);
+                System.out.format("You successfully regenerated the code !\nYour new security code is %d\n",ranNum);
                 return  securityRepo.save(security);
             }
             else
             {
-                security.setSecurityCode(securityCode);
+                security.setSecurityCode(encryptedPassword);
                 security.setUserId(user.getUserId());
                 security.setModifiedOn(date);
                 security.setModifiedBy(user.getName());
                 security.setCreatedOn(date);
                 security.setCreatedBy(user.getName());
-                System.out.format("You successfully generated the code !\n Your security code is %d\n",ranNum);
+                System.out.format("You successfully generated the code !\nYour security code is %d\n",ranNum);
                 return securityRepo.save(security);
             }
 
