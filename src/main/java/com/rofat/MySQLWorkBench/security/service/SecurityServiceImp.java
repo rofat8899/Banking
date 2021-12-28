@@ -22,6 +22,7 @@ public class SecurityServiceImp implements SecurityService{
     public Security generateSecurityCode(int userId, String userPin) {
         Boolean validate = userService.validation(userId,userPin);
         User user = userService.getUserByUserId(userId);
+        Security existedsecurity = securityRepo.getSecurityByUserId(userId);
         Date date = new Date();
         Random rnd = new Random();
         int securityCode = rnd.nextInt(999999);
@@ -31,10 +32,15 @@ public class SecurityServiceImp implements SecurityService{
         {
             if(isExisted)
             {
+
+                security.setSecurityId(existedsecurity.getSecurityId());
                 security.setSecurityCode(securityCode);
+                security.setUserId(existedsecurity.getUserId());
                 security.setNumberGenerate(0);
                 security.setModifiedOn(date);
                 security.setModifiedBy(user.getName());
+                security.setCreatedOn(existedsecurity.getCreatedOn());
+                security.setCreatedBy(existedsecurity.getCreatedBy());
                 return  securityRepo.save(security);
             }
             else
