@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SecurityRepo extends JpaRepository<Security,Integer> {
     Security getSecurityByUserId(Integer id);
     Boolean existsByUserId(Integer id);
+
 }

@@ -19,24 +19,15 @@ public class PinServiceImp implements PinService{
     @Autowired
     private UserRepo userRepo;
 
-
-//    AES256TextEncryptor textEncryptor = new AES256TextEncryptor();
-//    textEncryptor.setPassword(myEncryptionPassword);
-//    String myEncryptedText = textEncryptor.encrypt(myText);
-//    String plainText = textEncryptor.decrypt(myEncryptedText);
-
     @Override
     public Pin save(Pin pin) {
         Boolean existsUser = userRepo.existsByUserId(pin.getUserId());
         Boolean existsPin  = pinRepo.existsByUserIdAndPinIsNotNull(pin.getUserId());
-
-        //System.out.println(existsPin);
          if(existsUser){
              if(!existsPin){
                  StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
                  String encryptedPassword = passwordEncryptor.encryptPassword(pin.getPin());
                  pin.setPin(encryptedPassword);
-                 //System.out.println(encryptedPassword);
                  System.out.println("Pin is adding now");
                  return pinRepo.save(pin);
              }

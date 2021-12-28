@@ -2,8 +2,10 @@ package com.rofat.MySQLWorkBench.security.service;
 
 import com.rofat.MySQLWorkBench.security.model.Security;
 import com.rofat.MySQLWorkBench.security.repo.SecurityRepo;
+import com.rofat.MySQLWorkBench.user.Repo.UserRepo;
 import com.rofat.MySQLWorkBench.user.model.User;
 import com.rofat.MySQLWorkBench.user.service.UserService;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +18,24 @@ public class SecurityServiceImp implements SecurityService{
     private SecurityRepo securityRepo;
 
     @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
     private UserService userService;
 
     @Override
     public Security generateSecurityCode(int userId, String userPin) {
+
         Boolean validate = userService.validation(userId,userPin);
         User user = userService.getUserByUserId(userId);
         Security existedsecurity = securityRepo.getSecurityByUserId(userId);
         Date date = new Date();
         Random rnd = new Random();
-        int securityCode = rnd.nextInt(999999);
+        int ranNum = rnd.nextInt(999999);
+        System.out.println(ranNum);
+        String securityCode = String.valueOf(ranNum);
+        StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+        String encryptedPassword = passwordEncryptor.encryptPassword(securityCode);
         Boolean isExisted = securityRepo.existsByUserId(userId);
         Security security = new Security();
         if(validate)
@@ -34,7 +44,7 @@ public class SecurityServiceImp implements SecurityService{
             {
 
                 security.setSecurityId(existedsecurity.getSecurityId());
-                security.setSecurityCode(securityCode);
+                security.setSecurityCode(encryptedPassword);
                 security.setUserId(existedsecurity.getUserId());
                 security.setNumberGenerate(0);
                 security.setModifiedOn(date);
@@ -57,4 +67,39 @@ public class SecurityServiceImp implements SecurityService{
         }
         return null;
     }
+
+    @Override
+    public Boolean validateSecureCode(String code, int userId) {
+        Boolean existsUser = userRepo.existsByUserId(userId);
+        Security security = securityRepo.getSecurityByUserId(userId);
+        StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+        if(existsUser)
+        {
+            if(security.getNumberGenerate()<5)
+            {
+                if (passwordEncryptor.checkPassword(code, security.getSecurityCode())) {
+                    System.out.println("code accepted");
+                    return true;
+
+                } else {
+                    int numGen = security.getNumberGenerate();
+                    security.setNumberGenerate(numGen+1);
+                    securityRepo.save(security);
+                    System.out.println("Code is incorrect");
+                    System.out.format("You have %d attempted\n",security.getNumberGenerate());
+                }
+            }
+            else
+            {
+                System.out.println("You have reached limit attempt.");
+            }
+
+        }
+        else {
+            System.out.println("User is not exist");
+        }
+        return false;
+    }
+
+
 }

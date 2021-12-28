@@ -18,7 +18,7 @@ public class Security {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int securityId;
-    private int securityCode;
+    private String securityCode;
     private int userId;
     private int numberGenerate;
     private Date modifiedOn;
