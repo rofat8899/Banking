@@ -10,4 +10,6 @@ public interface UserAccountService {
     UserAccount addUserAccount_(UserAccount userAccount);
 
     List<UserAccount> getUserAccountByMasterAccId(Integer id);
+
+    UserAccount getUserAccountByAccountNumberAndMaId(Integer AccountNumber,Integer maId);
 }

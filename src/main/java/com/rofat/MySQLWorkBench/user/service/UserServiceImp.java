@@ -5,6 +5,7 @@ import com.rofat.MySQLWorkBench.pin.model.Pin;
 import com.rofat.MySQLWorkBench.pin.repo.PinRepo;
 import com.rofat.MySQLWorkBench.user.Repo.UserRepo;
 import com.rofat.MySQLWorkBench.user.model.User;
+import com.rofat.MySQLWorkBench.user.model.UserAccount;
 import lombok.AllArgsConstructor;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class UserServiceImp implements UserService {
 
     @Autowired
     private final PinRepo pinRepo;
+
+    @Autowired
+    private final UserAccountService userAccountServiceice;
 
     @Override
     public List<User> getAllUser() {
@@ -71,5 +75,11 @@ public class UserServiceImp implements UserService {
         User user = userRepo.getUserByMaId(maId);
         user.setDefaultAccount(defaultAccount);
         return userRepo.save(user);
+    }
+
+    @Override
+    public UserAccount getDefaultAccount(int maId) {
+        User user = userRepo.getUserByMaId(maId);
+        return userAccountServiceice.getUserAccountByAccountNumberAndMaId(user.getDefaultAccount(),user.getMaId());
     }
 }

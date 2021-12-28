@@ -108,4 +108,11 @@ public class UserController {
         System.out.println(maId);
         return userService.setDefaultAccount(maId,defaultAccount);
     }
+
+    //Get Default Account By Master Account ID
+    @GetMapping("/account/default/{id}")
+    public UserAccount getDefaultAccount(@PathVariable("id") int maId)
+    {
+        return userService.getDefaultAccount(maId);
+    }
 }

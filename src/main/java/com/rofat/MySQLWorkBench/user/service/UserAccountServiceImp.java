@@ -28,4 +28,9 @@ public class UserAccountServiceImp implements UserAccountService {
     public List<UserAccount> getUserAccountByMasterAccId(Integer id) {
         return userAccRepo.getUserAccountByMaId(id);
     }
+
+    @Override
+    public UserAccount getUserAccountByAccountNumberAndMaId(Integer AccountNumber, Integer maId) {
+        return userAccRepo.getUserAccountByAccountNumberAndMaId(AccountNumber,maId);
+    }
 }
