@@ -104,8 +104,6 @@ public class UserController {
     {
         int maId = (int) obj.get("maId");
         int defaultAccount = (int) obj.get("defaultAccount");
-        System.out.println(maId);
-        System.out.println(maId);
         return userService.setDefaultAccount(maId,defaultAccount);
     }
 
