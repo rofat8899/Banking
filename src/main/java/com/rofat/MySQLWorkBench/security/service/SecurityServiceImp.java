@@ -91,7 +91,7 @@ public class SecurityServiceImp implements SecurityService{
             }
             else
             {
-                System.out.println("You have reached limit attempt.");
+                System.out.format("You have reached (%d) limit attempt.\n",security.getNumberGenerate());
             }
 
         }
