@@ -65,4 +65,11 @@ public class UserServiceImp implements UserService {
         }
         return false;
     }
+
+    @Override
+    public User setDefaultAccount(int maId, int defaultAccount) {
+        User user = userRepo.getUserByMaId(maId);
+        user.setDefaultAccount(defaultAccount);
+        return userRepo.save(user);
+    }
 }

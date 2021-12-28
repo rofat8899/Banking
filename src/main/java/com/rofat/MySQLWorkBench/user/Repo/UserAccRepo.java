@@ -9,6 +9,5 @@ public interface UserAccRepo extends JpaRepository<UserAccount,Integer>{
     List<UserAccount> getUserAccountByMaId(Integer id);
 
     UserAccount getUserAccountByAccountNumber(int accountNumber);
-
 }
 

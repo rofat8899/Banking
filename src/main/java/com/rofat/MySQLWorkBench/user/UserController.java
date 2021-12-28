@@ -67,6 +67,7 @@ public class UserController {
         return userAccountService.getAllUserAccount();
     }
 
+    @PutMapping("/account/{uid}")                   //Update User
     @PostMapping("/account/{uid}")              //Insert User
     public UserAccount addUserAccount(@RequestBody UserAccount userAccount, @PathVariable("uid") Integer id){
         userAccount.setMaId(id);
@@ -97,4 +98,14 @@ public class UserController {
         return userService.validation(userId,userPin);
     }
 
+    //Set Default Account
+    @PostMapping("/account/default")
+    public User setDefaultAccount(@RequestBody Map<String,Object> obj)
+    {
+        int maId = (int) obj.get("maId");
+        int defaultAccount = (int) obj.get("defaultAccount");
+        System.out.println(maId);
+        System.out.println(maId);
+        return userService.setDefaultAccount(maId,defaultAccount);
+    }
 }

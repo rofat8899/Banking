@@ -13,4 +13,6 @@ public interface UserService {
     User getUserByUserId(Integer id);
 
     Boolean validation(Integer id, String pin);
+
+    User setDefaultAccount(int maId, int defaultAccount);
 }

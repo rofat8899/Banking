@@ -19,6 +19,8 @@ public class UserAccountServiceImp implements UserAccountService {
 
     @Override
     public UserAccount addUserAccount_(UserAccount userAccount) {
+        UserAccount userAccount1= userAccRepo.getUserAccountByAccountNumber(userAccount.getAccountNumber());
+        userAccount.setId(userAccount1.getId());
         return userAccRepo.save(userAccount);
     }
 
