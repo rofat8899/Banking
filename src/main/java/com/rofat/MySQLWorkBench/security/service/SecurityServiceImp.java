@@ -32,7 +32,6 @@ public class SecurityServiceImp implements SecurityService{
         Date date = new Date();
         Random rnd = new Random();
         int ranNum = rnd.nextInt(999999);
-        System.out.println(ranNum);
         String securityCode = String.valueOf(ranNum);
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(securityCode);
@@ -51,6 +50,7 @@ public class SecurityServiceImp implements SecurityService{
                 security.setModifiedBy(user.getName());
                 security.setCreatedOn(existedsecurity.getCreatedOn());
                 security.setCreatedBy(existedsecurity.getCreatedBy());
+                System.out.format("You successfully regenerated the code ! \n Your new security code is %d\n",ranNum);
                 return  securityRepo.save(security);
             }
             else
@@ -61,6 +61,7 @@ public class SecurityServiceImp implements SecurityService{
                 security.setModifiedBy(user.getName());
                 security.setCreatedOn(date);
                 security.setCreatedBy(user.getName());
+                System.out.format("You successfully generated the code ! \n Your security code is %d\n",ranNum);
                 return securityRepo.save(security);
             }
 
