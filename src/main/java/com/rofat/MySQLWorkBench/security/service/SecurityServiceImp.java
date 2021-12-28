@@ -74,31 +74,40 @@ public class SecurityServiceImp implements SecurityService{
         Boolean existsUser = userRepo.existsByUserId(userId);
         Security security = securityRepo.getSecurityByUserId(userId);
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
-        if(existsUser)
+        if(!code.equals("") && userId != 0)
         {
-            if(security.getNumberGenerate()<5)
+            if(existsUser)
             {
-                if (passwordEncryptor.checkPassword(code, security.getSecurityCode())) {
-                    System.out.println("code accepted");
-                    return true;
+                if(security.getNumberGenerate()<5)
+                {
+                    if (passwordEncryptor.checkPassword(code, security.getSecurityCode())) {
+                        System.out.println("Code accepted");
+                        return true;
 
-                } else {
-                    int numGen = security.getNumberGenerate();
-                    security.setNumberGenerate(numGen+1);
-                    securityRepo.save(security);
-                    System.out.println("Code is incorrect");
-                    System.out.format("You have %d attempted\n",security.getNumberGenerate());
+                    } else {
+                        int numGen = security.getNumberGenerate();
+                        security.setNumberGenerate(numGen+1);
+                        securityRepo.save(security);
+                        System.out.println("Code is incorrect");
+                        System.out.format("You have %d attempted\n",security.getNumberGenerate());
+                    }
                 }
-            }
-            else
-            {
-                System.out.format("You have reached (%d) limit attempt.\n",security.getNumberGenerate());
-            }
+                else
+                {
+                    System.out.format("You have reached (%d) limit attempt.\n",security.getNumberGenerate());
+                }
 
+            }
+            else {
+                System.out.println("User is not exist");
+            }
+            
         }
-        else {
-            System.out.println("User is not exist");
+        else
+        {
+            System.out.println("Please check your code or user ID again.");
         }
+
         return false;
     }
 
