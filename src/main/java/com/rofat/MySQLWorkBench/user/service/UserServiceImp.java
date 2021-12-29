@@ -4,6 +4,7 @@ import com.rofat.MySQLWorkBench.exception.BadRequestException;
 import com.rofat.MySQLWorkBench.pin.model.Pin;
 import com.rofat.MySQLWorkBench.pin.repo.PinRepo;
 import com.rofat.MySQLWorkBench.user.Repo.UserRepo;
+import com.rofat.MySQLWorkBench.user.constant.Role;
 import com.rofat.MySQLWorkBench.user.model.User;
 import com.rofat.MySQLWorkBench.user.model.UserAccount;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class UserServiceImp implements UserService {
     private final PinRepo pinRepo;
 
     @Autowired
-    private final UserAccountService userAccountServiceice;
+    private final UserAccountService userAccountService;
 
     @Override
     public List<User> getAllUser() {
@@ -80,6 +81,18 @@ public class UserServiceImp implements UserService {
     @Override
     public UserAccount getDefaultAccount(int maId) {
         User user = userRepo.getUserByMaId(maId);
-        return userAccountServiceice.getUserAccountByAccountNumberAndMaId(user.getDefaultAccount(),user.getMaId());
+        return userAccountService.getUserAccountByAccountNumberAndMaId(user.getDefaultAccount(),user.getMaId());
+    }
+
+    @Override
+    public Boolean isAdmin(int id) {
+        try{
+            User user = userRepo.getUserByUserId(id);
+            return user.getRole() == Role.ADMIN;
+        }
+        catch (Exception exception)
+        {
+            throw new NullPointerException();
+        }
     }
 }

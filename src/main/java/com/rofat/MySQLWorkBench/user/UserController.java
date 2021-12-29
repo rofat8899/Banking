@@ -72,20 +72,19 @@ public class UserController {
         return userAccountService.getAllUserAccount();
     }
 
-    @PutMapping("/account/{uid}")                   //Update User
-    @PostMapping("/account/{uid}")              //Insert User
-    public UserAccountApprove addUserAccount(@RequestBody UserAccountApprove userAccountApprove, @PathVariable("uid") Integer id){
+    //@PutMapping("/account/{id}")                   //Update User with Master ID
+    @PostMapping("/account/{id}")              //Insert User with Master ID
+    public UserAccountApprove addUserAccount(@RequestBody UserAccountApprove userAccountApprove, @PathVariable("id") Integer id){
         userAccountApprove.setMaId(id);
         return userAccountApproveService.addOrUpdateUserAccountApprove_(userAccountApprove);
     }
 
-    @GetMapping("/account/activate/{id}")
+    @GetMapping("/account/activate/{id}") //Activate User Account
     public UserAccount activateUserAccount(@RequestBody Map<String,Object> obj, @PathVariable("id") int accountNumber)
     {
         int userId = (int) obj.get("userId");
         String userPin = (String) obj.get("userPin");
-        String userRole= (String) obj.get("role");
-        return userAccountApproveService.activateUserAccount(userId,userPin,userRole,accountNumber);
+        return userAccountApproveService.activateUserAccount(userId,userPin,accountNumber);
     }
 
     @GetMapping("/account/{id}")          //Get User By Master Account ID

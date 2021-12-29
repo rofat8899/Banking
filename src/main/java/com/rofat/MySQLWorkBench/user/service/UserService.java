@@ -19,4 +19,6 @@ public interface UserService {
     User setDefaultAccount(int maId, int defaultAccount);
 
     UserAccount getDefaultAccount(int maId);
+
+    Boolean isAdmin(int id);
 }

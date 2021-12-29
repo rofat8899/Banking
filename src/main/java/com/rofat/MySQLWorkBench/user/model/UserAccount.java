@@ -32,4 +32,12 @@ public class UserAccount {
     private double balance;             //Balance
 
 
+    public UserAccount(int id, int accountNumber, AccountType accountType, double balance, CurrencyType currencyType, int maId) {
+        this.id = id;
+        this.accountNumber =accountNumber;
+        this.accountType= accountType;
+        this.balance= balance;
+        this.currencyType= currencyType;
+        this.maId=maId;
+    }
 }
