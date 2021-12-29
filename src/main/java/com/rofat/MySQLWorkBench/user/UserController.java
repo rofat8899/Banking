@@ -95,7 +95,7 @@ public class UserController {
 
     // User Contact
 
-    @PostMapping("/contact/{uid}")              //Insert User Contact
+    @PostMapping("/contact/{uid}")              //Insert User Contact with Master Account ID
     public UserContact addUserContact(@RequestBody UserContact userContact, @PathVariable("uid") Integer id){
         userContact.setMaId(id);
         return userContactService.addUserContact(userContact);
