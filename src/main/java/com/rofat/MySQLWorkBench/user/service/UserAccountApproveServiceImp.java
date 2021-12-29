@@ -43,7 +43,7 @@ public class UserAccountApproveServiceImp implements UserAccountApproveService{
                     userAccountApprove.getAccountType(),userAccountApprove.getBalance(),
                     userAccountApprove.getCurrencyType(),userAccountApprove.getMaId());
             userAccountService.addUserAccount_(userAccount);
-            deleteUserAccountApprove(userAccountApprove);
+            updateUserAccountApprove(userAccountApprove);
             System.out.format("Account %d is activated\n",accountNumber);
             return userAccount;
             }
@@ -55,7 +55,9 @@ public class UserAccountApproveServiceImp implements UserAccountApproveService{
         return null;
     }
 
-    public void deleteUserAccountApprove(UserAccountApprove userAccountApprove){
-        userAccApproveRepo.delete(userAccountApprove);
+    public void updateUserAccountApprove(UserAccountApprove userAccountApprove)
+    {
+        userAccountApprove.setPending(false);
+        userAccApproveRepo.save(userAccountApprove);
     }
 }
