@@ -22,4 +22,9 @@ public class PromotionServiceImp implements PromotionService{
     public Promotions save(Promotions promotions) {
         return promotionsRepo.save(promotions);
     }
+
+    @Override
+    public List<Promotions> findByMasterId(int maid) {
+        return promotionsRepo.findPromotionsByMaid(maid);
+    }
 }
