@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-public class pinController {
+public class PinController {
 
     @Autowired
     PinService pinService;
