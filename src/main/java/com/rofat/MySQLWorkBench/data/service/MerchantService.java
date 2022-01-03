@@ -1,6 +1,6 @@
-package com.rofat.MySQLWorkBench.merchant.service;
+package com.rofat.MySQLWorkBench.data.service;
 
-import com.rofat.MySQLWorkBench.merchant.model.Merchant;
+import com.rofat.MySQLWorkBench.data.model.Merchant;
 
 import java.util.List;
 

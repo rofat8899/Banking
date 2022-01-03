@@ -1,7 +1,7 @@
 package com.rofat.MySQLWorkBench.user.service;
 
-import com.rofat.MySQLWorkBench.merchant.model.MerchantSettlements;
-import com.rofat.MySQLWorkBench.merchant.repo.MerchantSettlementRepo;
+import com.rofat.MySQLWorkBench.data.model.MerchantSettlements;
+import com.rofat.MySQLWorkBench.data.repo.MerchantSettlementRepo;
 import com.rofat.MySQLWorkBench.user.Repo.UserAccApproveRepo;
 import com.rofat.MySQLWorkBench.user.Repo.UserAccRepo;
 import com.rofat.MySQLWorkBench.user.model.UserAccount;

@@ -1,4 +1,4 @@
-package com.rofat.MySQLWorkBench.merchant.model;
+package com.rofat.MySQLWorkBench.data.model;
 
 import com.rofat.MySQLWorkBench.user.model.UserAccount;
 import lombok.Data;

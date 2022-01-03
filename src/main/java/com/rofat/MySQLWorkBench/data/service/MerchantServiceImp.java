@@ -1,7 +1,7 @@
-package com.rofat.MySQLWorkBench.merchant.service;
+package com.rofat.MySQLWorkBench.data.service;
 
-import com.rofat.MySQLWorkBench.merchant.model.Merchant;
-import com.rofat.MySQLWorkBench.merchant.repo.MerchantRepo;
+import com.rofat.MySQLWorkBench.data.model.Merchant;
+import com.rofat.MySQLWorkBench.data.repo.MerchantRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
