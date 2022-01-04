@@ -1,5 +1,6 @@
 package com.rofat.MySQLWorkBench.controller;
 
+import com.rofat.MySQLWorkBench.dto.UserDTO;
 import com.rofat.MySQLWorkBench.model.UserAccountApproveEntity;
 import com.rofat.MySQLWorkBench.model.UserAccountEntity;
 import com.rofat.MySQLWorkBench.model.UserContactEntity;
@@ -42,12 +43,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}")          //Get User By Master Account ID
-    public ResponseEntity<UserEntity> getUserByMasterAccId(@PathVariable Integer id) {
+    public ResponseEntity<UserDTO> getUserByMasterAccId(@PathVariable Integer id) {
         try {
-            UserEntity user = userService.getUserByMasterAccId(id);
-            return new ResponseEntity<UserEntity>(user, HttpStatus.OK);
+            UserDTO user = userService.getUserByMasterAccId(id);
+            return new ResponseEntity<UserDTO>(user, HttpStatus.OK);
         } catch (NoSuchElementException e) {
-            return new ResponseEntity<UserEntity>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<UserDTO>(HttpStatus.NOT_FOUND);
         }
     }
 

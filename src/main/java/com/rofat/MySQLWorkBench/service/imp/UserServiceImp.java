@@ -1,6 +1,7 @@
 package com.rofat.MySQLWorkBench.service.imp;
 
 import com.rofat.MySQLWorkBench.constant.Role;
+import com.rofat.MySQLWorkBench.dto.UserDTO;
 import com.rofat.MySQLWorkBench.exception.BadRequestException;
 import com.rofat.MySQLWorkBench.model.PinEntity;
 import com.rofat.MySQLWorkBench.model.UserAccountEntity;
@@ -43,8 +44,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserEntity getUserByMasterAccId(Integer id) {
-        return userRepo.getUserByMaId(id);
+    public UserDTO getUserByMasterAccId(Integer id) {
+        UserEntity uEntity = userRepo.getUserByMaId(id);
+        return new UserDTO(uEntity);
     }
 
     @Override

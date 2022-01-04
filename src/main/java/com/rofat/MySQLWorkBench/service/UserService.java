@@ -1,5 +1,6 @@
 package com.rofat.MySQLWorkBench.service;
 
+import com.rofat.MySQLWorkBench.dto.UserDTO;
 import com.rofat.MySQLWorkBench.model.UserAccountEntity;
 import com.rofat.MySQLWorkBench.model.UserEntity;
 
@@ -8,7 +9,7 @@ import java.util.List;
 public interface UserService {
 
     List<UserEntity> getAllUser();
-    UserEntity getUserByMasterAccId(Integer id);
+    UserDTO getUserByMasterAccId(Integer id);
     UserEntity getUserByUserId(Integer id);
     UserAccountEntity getDefaultAccount(int maId);
 
