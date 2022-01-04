@@ -14,6 +14,7 @@ public class PinController {
     @Autowired
     PinService pinService;
 
+    //Create Pin with UserID
     @PostMapping("/pin/{id}")
     public Pin addPin(@RequestBody Pin pin, @PathVariable Integer id)
     {
@@ -22,6 +23,7 @@ public class PinController {
         return  pinService.save(pin);
     }
 
+    //Get All User Pin
     @GetMapping("/pin")
     public List<Pin> getAllUserPin(){
         return pinService.findAll();

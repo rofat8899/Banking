@@ -37,4 +37,10 @@ public class UserAccountServiceImp implements UserAccountService {
     public UserAccount getUserAccountByAccountNumberAndMaId(Integer AccountNumber, Integer maId) {
         return userAccRepo.getUserAccountByAccountNumberAndMaId(AccountNumber,maId);
     }
+
+    @Override
+    public void deleteUserAccount(Integer accountNumber) {
+
+        userAccRepo.deleteUserAccountByAccountNumber(accountNumber);
+    }
 }

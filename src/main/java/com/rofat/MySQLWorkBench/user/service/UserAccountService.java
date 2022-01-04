@@ -12,4 +12,6 @@ public interface UserAccountService {
     List<UserAccount> getUserAccountByMasterAccId(Integer id);
 
     UserAccount getUserAccountByAccountNumberAndMaId(Integer AccountNumber,Integer maId);
+
+    void deleteUserAccount(Integer accountId);
 }

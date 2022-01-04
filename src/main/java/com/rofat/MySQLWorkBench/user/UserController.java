@@ -79,6 +79,13 @@ public class UserController {
         return userAccountApproveService.addOrUpdateUserAccountApprove_(userAccountApprove);
     }
 
+    @PutMapping("/account/{id}")        //Delete User Account
+    public String deleteUserAccount(@PathVariable("id") Integer accountNumber)
+    {
+        userAccountService.deleteUserAccount(accountNumber);
+        return "Successfully deleted";
+    }
+
     @GetMapping("/account/activate/{id}") //Activate User Account
     public UserAccount activateUserAccount(@RequestBody Map<String,Object> obj, @PathVariable("id") int accountNumber)
     {
