@@ -10,14 +10,14 @@ import javax.persistence.*;
 @Setter
 @Getter
 @NoArgsConstructor
-@Table(name="MERCHANT_SETTLEMEMT")
+@Table(name="MERCHANT_SETTLEMENTS")
 public class MerchantSettlementsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Column(name="MERCHANT_MASTER_ACCOUNT_ID")
+    @Column(name="MERCHANT_ENTITY_MASTER_ACCOUNT_ID")
     private int merchantMasterId;
-    @Column(name="USER_ACCOUNT_ID")
+    @Column(name="SETTLEMENTS_ID")
     private int SettlementsId;
 
     public MerchantSettlementsEntity(int mmid, int sid) {
