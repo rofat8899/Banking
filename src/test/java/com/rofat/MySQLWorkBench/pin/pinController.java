@@ -1,10 +1,8 @@
 package com.rofat.MySQLWorkBench.pin;
 
-import com.rofat.MySQLWorkBench.pin.model.Pin;
-import com.rofat.MySQLWorkBench.pin.service.PinService;
+import com.rofat.MySQLWorkBench.model.PinEntity;
+import com.rofat.MySQLWorkBench.service.PinService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,10 +14,10 @@ public class pinController {
     PinService pinService;
 
     @PostMapping("/pin/{id}")
-    public Pin addPin(@RequestBody Pin pin, @PathVariable Integer id)
+    public PinEntity addPin(@RequestBody PinEntity pinEntity, @PathVariable Integer id)
     {
-        pin.setUserId(id);
-        return  pinService.save(pin);
+        pinEntity.setUserId(id);
+        return  pinService.save(pinEntity);
     }
 //    @PostMapping("/pin/{id}")
 //    public ResponseEntity<Pin> addPin(@RequestBody Pin pin, @PathVariable int id)
@@ -38,7 +36,7 @@ public class pinController {
 //    }
 
     @GetMapping("/pin")
-    public List<Pin> getAllUserPin(){
+    public List<PinEntity> getAllUserPin(){
         return pinService.findAll();
     }
 }

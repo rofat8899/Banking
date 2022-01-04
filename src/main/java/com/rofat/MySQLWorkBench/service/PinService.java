@@ -1,4 +1,4 @@
-package com.rofat.MySQLWorkBench.pin.service;
+package com.rofat.MySQLWorkBench.service;
 
 import com.rofat.MySQLWorkBench.model.PinEntity;
 
