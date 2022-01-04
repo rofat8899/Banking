@@ -20,8 +20,8 @@ public class MerchantSettlementsEntity {
     @Column(name="SETTLEMENTS_ID")
     private int SettlementsId;
 
-    public MerchantSettlementsEntity(int mmid, int sid) {
-        this.merchantMasterId=mmid;
+    public MerchantSettlementsEntity(int mid, int sid) {
+        this.merchantMasterId=mid;
         this.SettlementsId=sid;
     }
 }
