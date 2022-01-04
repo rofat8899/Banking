@@ -3,13 +3,12 @@ package com.rofat.MySQLWorkBench.controller;
 import com.rofat.MySQLWorkBench.dto.DataDTO;
 import com.rofat.MySQLWorkBench.model.MerchantEntity;
 import com.rofat.MySQLWorkBench.model.PromotionsEntity;
+import com.rofat.MySQLWorkBench.service.DataService;
 import com.rofat.MySQLWorkBench.service.MerchantService;
 import com.rofat.MySQLWorkBench.service.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 
 @RestController
@@ -19,6 +18,8 @@ public class DataController {
     private MerchantService merchantService;
     @Autowired
     private PromotionService promotionService;
+    @Autowired
+    private DataService dataService;
 
     //Get all Merchant
     @GetMapping("/merchant")
@@ -59,12 +60,7 @@ public class DataController {
 
     //Get Data by master ID
     @GetMapping("{mid}")
-    public Dictionary getDataByMasterId(@PathVariable("mid") int mid) {
-        DataDTO data = new DataDTO();
-        data.setMerchantEntity(merchantService.getMerchantByMasterId(mid));
-        data.setPromotions(promotionService.findByMasterId(mid));
-        Dictionary result = new Hashtable();
-        result.put("data", data);
-        return result;
+    public DataDTO getDataByMasterId(@PathVariable("mid") int mid) {
+        return dataService.getDataByMasterId(merchantService.getMerchantByMasterId(mid),promotionService.findByMasterId(mid));
     }
 }

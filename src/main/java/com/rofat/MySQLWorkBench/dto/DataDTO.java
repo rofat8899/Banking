@@ -7,10 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class DataDTO {
-    private MerchantEntity merchantEntity;
-    private List<PromotionsEntity> promotions;
+    private MerchantDTO merchant;
+    public DataDTO(MerchantEntity merchantByMasterId, List<PromotionsEntity> promotionByMasterId) {
+        this.merchant = new MerchantDTO(merchantByMasterId);
+    }
+    //private List<PromotionsEntity> promotions;
 }
