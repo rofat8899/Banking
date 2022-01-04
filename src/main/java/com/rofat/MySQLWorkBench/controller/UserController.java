@@ -23,13 +23,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private UserAccountService userAccountService;
-
     @Autowired
     private UserContactService userContactService;
-
     @Autowired
     private UserAccountApproveService userAccountApproveService;
 

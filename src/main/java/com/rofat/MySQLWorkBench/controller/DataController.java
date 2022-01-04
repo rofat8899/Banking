@@ -20,7 +20,6 @@ public class DataController {
     @Autowired
     private PromotionService promotionService;
 
-
     //Get all Merchant
     @GetMapping("/merchant")
     public List<MerchantEntity> getAllMerchant() {

@@ -17,7 +17,6 @@ public class PinController {
     //Create Pin with UserID
     @PostMapping("/pin/{id}")
     public PinEntity addPin(@RequestBody PinEntity pinEntity, @PathVariable Integer id) {
-
         pinEntity.setUserId(id);
         return pinService.save(pinEntity);
     }
