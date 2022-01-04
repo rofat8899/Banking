@@ -17,7 +17,6 @@ public class MerchantDTO {
     private String email;
     private String phone;
     private String name;
-
     private String secretKey;
     private int MasterAccountId;
     private List<UserAccountDTO> settlements;

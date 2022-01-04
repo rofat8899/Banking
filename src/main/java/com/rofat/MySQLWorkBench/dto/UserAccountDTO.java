@@ -10,17 +10,13 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class UserAccountDTO {
-    private int id;
+    private int accountId;
     private CurrencyType currencyType;
     private int accountNumber;
     UserAccountDTO(UserAccountEntity userAccountEntity){
-        this.id= userAccountEntity.getId();
+        this.accountId= userAccountEntity.getId();
         this.currencyType=userAccountEntity.getCurrencyType();
         this.accountNumber=userAccountEntity.getAccountNumber();
     }
-    void addEntity(UserAccountEntity userAccountEntity){
-        this.id= userAccountEntity.getId();
-        this.currencyType=userAccountEntity.getCurrencyType();
-        this.accountNumber=userAccountEntity.getAccountNumber();
-    }
+
 }
