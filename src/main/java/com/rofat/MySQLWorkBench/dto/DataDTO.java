@@ -13,4 +13,5 @@ import java.util.List;
 public class DataDTO {
     private MerchantEntity merchantEntity;
     private List<PromotionsEntity> promotions;
+
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+
 @Data
 @Entity
 @Getter
@@ -31,7 +32,8 @@ public class MerchantEntity {
     @Column(name="SECRET_KEY")
     private String secretKey;
 
-    @OneToMany(targetEntity = UserAccountEntity.class,cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MASTER_ACCOUNT_ID")
     private List<UserAccountEntity> settlements;
 
 }
