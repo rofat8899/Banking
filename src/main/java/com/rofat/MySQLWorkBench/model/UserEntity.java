@@ -12,26 +12,28 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "USER")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private int maId;       //Master Account ID
-
-    private int userId;     //User ID
-
-    private String name;    //Nam
-
-    private Sex sex;        //Sex
-
-    private int age;        //Age
-
-    private int defaultAccount; // default account
-
+    @Column(name="MASTER_ACCOUNT_ID")
+    private int maId;
+    @Column(name="USER_ID")
+    private int userId;
+    @Column(name="NAME")
+    private String name;
+    @Column(name="SEX")
+    private Sex sex;
+    @Column(name="AGE")
+    private int age;
+    @Column(name="DEFAULT_ACCOUNT")
+    private int defaultAccount;
+    @Column(name="ROLE")
     private Role role;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private UserAddressEntity address; //Address Table
+    private UserAddressEntity address;
     @OneToOne(cascade = CascadeType.ALL)
-    private UserContactEntity contact; //Contact Table
+    private UserContactEntity contact;
 
 }

@@ -12,23 +12,23 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name="merchant")
+@Table(name="MERCHANT")
 public class MerchantEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="master_id")
+    @Column(name="MASTER_ACCOUNT_ID")
     private int maId;
-
+    @Column(name="ID")
     private int id;
-
+    @Column(name="MERCHANT_ID")
     private String merchantId;
-
+    @Column(name="EMAIL")
     private String email;
-
+    @Column(name="PHONE")
     private String phone;
-
+    @Column(name="NAME")
     private String name;
-
+    @Column(name="SECRET_KEY")
     private String secretKey;
 
     @OneToMany(targetEntity = UserAccountEntity.class,cascade = CascadeType.ALL)
