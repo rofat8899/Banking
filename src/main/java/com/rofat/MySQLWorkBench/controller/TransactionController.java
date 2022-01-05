@@ -19,7 +19,7 @@ public class TransactionController {
 
     @PutMapping("/cashout/{id}")    //Cash Out
     public UserAccountEntity cashOut(@PathVariable("id") int accNum, @RequestParam double amount, @RequestBody Map<String, Object> obj) {
-        int userId = (int) obj.get("userId");
+        String userId = (String) obj.get("userId");
         String userPin = (String) obj.get("userPin");
         Boolean validate = userService.validation(userId, userPin);      //validate user
         if (validate) {
@@ -30,7 +30,7 @@ public class TransactionController {
 
     @PutMapping("/cashin/{id}")     //Cash In
     public UserAccountEntity cashIn(@PathVariable("id") int accNum, @RequestParam double amount, @RequestBody Map<String, Object> obj) {
-        int userId = (int) obj.get("userId");
+        String userId = (String) obj.get("userId");
         String userPin = (String) obj.get("userPin");
         Boolean validate = userService.validation(userId, userPin);      //validate user
         if (validate) {
@@ -41,7 +41,7 @@ public class TransactionController {
 
     @PutMapping("/transfer/{id}")   //Transfer Money
     public TransactionHistoryEntity transferMoney(@PathVariable("id") int sender, @RequestParam double amount, @RequestParam(name = "recAcc") int recAcc, @RequestBody Map<String, Object> obj) {
-        int userId = (int) obj.get("userId");
+        String userId = (String) obj.get("userId");
         String userPin = (String) obj.get("userPin");
         Boolean validate = userService.validation(userId, userPin);      //validate user
         if (validate) {

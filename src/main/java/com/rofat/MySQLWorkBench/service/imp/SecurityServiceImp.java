@@ -26,7 +26,7 @@ public class SecurityServiceImp implements SecurityService {
     private UserService userService;
 
     @Override
-    public SecurityEntity generateSecurityCode(int userId, String userPin) {
+    public SecurityEntity generateSecurityCode(String userId, String userPin) {
 
         Boolean validate = userService.validation(userId, userPin);
         UserEntity user = userService.getUserByUserId(userId);
@@ -69,14 +69,14 @@ public class SecurityServiceImp implements SecurityService {
     }
 
     @Override
-    public Boolean validateSecureCode(String code, int userId) {
+    public Boolean validateSecureCode(String code, String userId) {
         Boolean existsUser = userRepo.existsByUserId(userId);
         SecurityEntity securityEntity = securityRepo.getSecurityByUserId(userId);
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         LocalDateTime now = LocalDateTime.now();
         long diff = ChronoUnit.SECONDS.between(securityEntity.getModifiedOn(), now);
 
-        if (!code.equals("") && userId != 0) {
+        if (!code.equals("")) {
             if (existsUser) {
                 if (diff < 600) // 10 minutes
                 {

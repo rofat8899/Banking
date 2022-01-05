@@ -10,13 +10,13 @@ public interface UserService {
 
     List<UserEntity> getAllUser();
     UserDTO getUserByMasterAccId(Integer id);
-    UserEntity getUserByUserId(Integer id);
+    UserEntity getUserByUserId(String id);
     UserAccountEntity getDefaultAccount(int maId);
 
     UserEntity addUser(UserEntity user);
 
     UserEntity setDefaultAccount(int maId, int defaultAccount);
 
-    Boolean validation(Integer id, String pin);
-    Boolean isAdmin(int id);
+    Boolean validation(String id, String pin);
+    Boolean isAdmin(String id);
 }

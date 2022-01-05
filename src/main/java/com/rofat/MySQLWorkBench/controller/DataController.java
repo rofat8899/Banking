@@ -61,6 +61,6 @@ public class DataController {
     //Get Data by master ID
     @GetMapping("{mid}")
     public DataDTO getDataByMasterId(@PathVariable("mid") int mid) {
-        return dataService.getDataByMasterId(merchantService.getMerchantByMasterId(mid),promotionService.findByMasterId(mid));
+        return dataService.getDataByMasterId(mid);
     }
 }

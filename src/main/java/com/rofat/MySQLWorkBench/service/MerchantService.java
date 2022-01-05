@@ -10,4 +10,6 @@ public interface MerchantService {
     MerchantEntity addMerchant(MerchantEntity merchantEntity);
 
     MerchantEntity getMerchantByMasterId(int id);
+
+    MerchantEntity getMerchantByMerchantId(String id);
 }

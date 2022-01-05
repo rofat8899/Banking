@@ -27,4 +27,9 @@ public class MerchantServiceImp implements MerchantService {
     public MerchantEntity getMerchantByMasterId(int id) {
         return merchantRepo.findMerchantByMaId(id);
     }
+
+    @Override
+    public MerchantEntity getMerchantByMerchantId(String id) {
+        return merchantRepo.findMerchantEntityByMerchantId(id);
+    }
 }

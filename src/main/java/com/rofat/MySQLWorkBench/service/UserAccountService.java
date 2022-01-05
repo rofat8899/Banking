@@ -12,6 +12,8 @@ public interface UserAccountService {
 
     UserAccountEntity getUserAccountByAccountNumberAndMaId(Integer AccountNumber, Integer maId);
 
+    UserAccountEntity getUserAccountByAccountNumber(Integer accountNumber);
+
     UserAccountEntity addUserAccount_(UserAccountEntity userAccount);
 
     void deleteUserAccount(Integer accountId);

@@ -4,8 +4,6 @@ import com.rofat.MySQLWorkBench.model.UserAccountEntity;
 import com.rofat.MySQLWorkBench.model.UserAccountApproveEntity;
 
 public interface UserAccountApproveService {
-    UserAccountEntity activateUserAccount(int userId, String userPin, int accountNumber);
+    UserAccountEntity activateUserAccount(String userId, String userPin, int accountNumber);
     UserAccountApproveEntity addOrUpdateUserAccountApprove_(UserAccountApproveEntity userAccount);
-
-    void insertMerchantSettlement(int mid, int sid);
 }

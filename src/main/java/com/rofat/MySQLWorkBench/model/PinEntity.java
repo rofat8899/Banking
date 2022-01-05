@@ -19,5 +19,5 @@ public class PinEntity {
     @Column(name="PIN_CODE")
     private String pin;
     @Column(name="USER_ID")
-    private int userId;
+    private String userId;
 }

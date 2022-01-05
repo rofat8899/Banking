@@ -19,7 +19,7 @@ public class UserEntity {
     @Column(name="MASTER_ACCOUNT_ID")
     private int maId;
     @Column(name="USER_ID")
-    private int userId;
+    private String userId;
     @Column(name="NAME")
     private String name;
     @Column(name="SEX")

@@ -50,12 +50,12 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserEntity getUserByUserId(Integer id) {
+    public UserEntity getUserByUserId(String id) {
         return userRepo.getUserByUserId(id);
     }
 
     @Override
-    public Boolean validation(Integer id, String pin) {
+    public Boolean validation(String id, String pin) {
         Boolean existsUser = userRepo.existsByUserId(id); //check if database containing user or not
         PinEntity pinEntity1 = pinRepo.findPinByUserId(id);  //fetch data from pin table by id
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
@@ -87,7 +87,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Boolean isAdmin(int id) {
+    public Boolean isAdmin(String id) {
         try {
             UserEntity user = userRepo.getUserByUserId(id);
             return user.getRole() == Role.ADMIN;

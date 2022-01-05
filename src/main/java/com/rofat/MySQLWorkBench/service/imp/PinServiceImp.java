@@ -39,7 +39,7 @@ public class PinServiceImp implements PinService {
     }
 
     @Override
-    public PinEntity findByUserId(int id) {
+    public PinEntity findByUserId(String id) {
         return pinRepo.findPinByUserId(id);
     }
 

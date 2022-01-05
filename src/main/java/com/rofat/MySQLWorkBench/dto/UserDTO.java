@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserDTO {
     private int masterAccountID;
-    private int userId;
+    private String userId;
     private String name;
     private Sex sex;
     private int age;

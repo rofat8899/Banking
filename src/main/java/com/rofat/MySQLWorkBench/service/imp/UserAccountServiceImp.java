@@ -40,6 +40,11 @@ public class UserAccountServiceImp implements UserAccountService {
     }
 
     @Override
+    public UserAccountEntity getUserAccountByAccountNumber(Integer accountNumber) {
+        return userAccRepo.getUserAccountByAccountNumber(accountNumber);
+    }
+
+    @Override
     public void deleteUserAccount(Integer accountNumber) {
 
         userAccRepo.deleteUserAccountByAccountNumber(accountNumber);

@@ -4,7 +4,7 @@ import com.rofat.MySQLWorkBench.model.PinEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PinRepo extends JpaRepository<PinEntity,Integer> {
-   PinEntity findPinByUserId(int id);
-   Boolean existsByUserIdAndPinIsNotNull(int id);
+   PinEntity findPinByUserId(String id);
+   Boolean existsByUserIdAndPinIsNotNull(String id);
    Boolean existsByPinAndUserId(String pin,int id);
 }

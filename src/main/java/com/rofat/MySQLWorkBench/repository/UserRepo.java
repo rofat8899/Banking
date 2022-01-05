@@ -4,8 +4,8 @@ import com.rofat.MySQLWorkBench.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepo extends JpaRepository<UserEntity, Integer> {
-    UserEntity getUserByUserId(Integer id);
+    UserEntity getUserByUserId(String id);
     UserEntity getUserByMaId(Integer id);
-    Boolean existsByUserId(Integer id);
+    Boolean existsByUserId(String id);
 
 }

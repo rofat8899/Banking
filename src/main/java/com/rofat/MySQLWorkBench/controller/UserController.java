@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @GetMapping("/uid/{id}")          //Get User By UserID
-    public ResponseEntity<UserEntity> getUserByUserId(@PathVariable Integer id) {
+    public ResponseEntity<UserEntity> getUserByUserId(@PathVariable String id) {
         try {
             UserEntity user = userService.getUserByUserId(id);
             return new ResponseEntity<>(user, HttpStatus.OK);
@@ -83,7 +83,7 @@ public class UserController {
 
     @GetMapping("/account/activate/{id}") //Activate User Account
     public UserAccountEntity activateUserAccount(@RequestBody Map<String, Object> obj, @PathVariable("id") int accountNumber) {
-        int userId = (int) obj.get("userId");
+        String userId = (String) obj.get("userId");
         String userPin = (String) obj.get("userPin");
         return userAccountApproveService.activateUserAccount(userId, userPin, accountNumber);
     }
@@ -104,7 +104,7 @@ public class UserController {
     //User validation
     @GetMapping("/validation")      //validate pin
     public Boolean userValidation(@RequestBody Map<String, Object> obj) {
-        int userId = (int) obj.get("userId");
+        String userId = (String) obj.get("userId");
         String userPin = (String) obj.get("userPin");
         return userService.validation(userId, userPin);
     }

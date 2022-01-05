@@ -15,7 +15,7 @@ public class SecurityController {
 
     @PostMapping()
     public SecurityEntity generateSecurcode(@RequestBody Map<String, Object> obj) {
-        int userId = (int) obj.get("userId");
+        String userId = (String) obj.get("userId");
         String userPin = (String) obj.get("userPin");
         return securityService.generateSecurityCode(userId, userPin);
     }
@@ -23,7 +23,7 @@ public class SecurityController {
     @GetMapping()
     public Boolean validateSecureCode(@RequestBody Map<String, Object> obj) {
         String code = (String) obj.get("code");
-        int userId = (int) obj.get("userId");
+        String userId = (String) obj.get("userId");
         return securityService.validateSecureCode(code, userId);
     }
 }

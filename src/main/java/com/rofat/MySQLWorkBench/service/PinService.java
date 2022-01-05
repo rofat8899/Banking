@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PinService {
     PinEntity save(PinEntity pinEntity);
-    PinEntity findByUserId(int id);
+    PinEntity findByUserId(String id);
 
     List<PinEntity> findAll();
 }

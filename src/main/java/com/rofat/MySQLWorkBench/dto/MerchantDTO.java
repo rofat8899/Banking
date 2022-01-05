@@ -18,19 +18,19 @@ public class MerchantDTO {
     private String phone;
     private String name;
     private String secretKey;
-    private int MasterAccountId;
+    private int masterAccountId;
     private List<UserAccountDTO> settlements;
 
-    public MerchantDTO(MerchantEntity merchantByMasterId) {
-        this.merchantId = merchantByMasterId.getMerchantId();
-        this.id = merchantByMasterId.getId();
-        this.email = merchantByMasterId.getEmail();
-        this.phone = merchantByMasterId.getPhone();
-        this.name = merchantByMasterId.getName();
-        this.secretKey = merchantByMasterId.getSecretKey();
-        MasterAccountId = merchantByMasterId.getId();
+    public MerchantDTO(MerchantEntity merchantEntity,List<UserAccountEntity> userAccountEntity) {
+        this.merchantId = merchantEntity.getMerchantId();
+        this.id = merchantEntity.getId();
+        this.email = merchantEntity.getEmail();
+        this.phone = merchantEntity.getPhone();
+        this.name = merchantEntity.getName();
+        this.secretKey = merchantEntity.getSecretKey();
+        masterAccountId = merchantEntity.getId();
         List<UserAccountDTO> finalSettlement = new ArrayList<>();
-        for (UserAccountEntity settlement : merchantByMasterId.getSettlements()) {
+        for (UserAccountEntity settlement : userAccountEntity) {
             UserAccountDTO eachUserAccount = new UserAccountDTO(settlement);
             finalSettlement.add(eachUserAccount);
         }

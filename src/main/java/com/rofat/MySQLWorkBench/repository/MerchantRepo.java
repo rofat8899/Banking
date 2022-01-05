@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MerchantRepo extends JpaRepository<MerchantEntity,Integer> {
 
     MerchantEntity findMerchantByMaId(int id);
+    MerchantEntity findMerchantEntityByMerchantId(String id);
 }

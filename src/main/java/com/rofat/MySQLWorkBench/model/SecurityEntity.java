@@ -20,7 +20,7 @@ public class SecurityEntity {
     @Column(name="SECURITY_CODE")
     private String securityCode;
     @Column(name="USER_ID")
-    private int userId;
+    private String userId;
     @Column(name="NUMBER_GENERATE")
     private int numberGenerate;
     @Column(name="MODIFIED_ON")

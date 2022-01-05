@@ -2,6 +2,7 @@ package com.rofat.MySQLWorkBench.dto;
 
 import com.rofat.MySQLWorkBench.model.MerchantEntity;
 import com.rofat.MySQLWorkBench.model.PromotionsEntity;
+import com.rofat.MySQLWorkBench.model.UserAccountEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,8 +17,8 @@ public class DataDTO {
     private MerchantDTO merchant;
     private List<PromotionDTO> promotions;
 
-    public DataDTO(MerchantEntity merchantByMasterId, List<PromotionsEntity> promotionByMasterId) {
-        this.merchant = new MerchantDTO(merchantByMasterId);
+    public DataDTO(MerchantEntity merchantEntity, List<UserAccountEntity> userAccountEntities, List<PromotionsEntity> promotionByMasterId) {
+        this.merchant = new MerchantDTO(merchantEntity,userAccountEntities);
         List<PromotionDTO> finalPromotions = new ArrayList<>();
         for (PromotionsEntity each : promotionByMasterId) {
             PromotionDTO promotionDTO = new PromotionDTO(each);
