@@ -1,5 +1,6 @@
 package com.rofat.MySQLWorkBench.service.imp;
 
+import com.rofat.MySQLWorkBench.constant.CurrencyType;
 import com.rofat.MySQLWorkBench.constant.TransactionType;
 import com.rofat.MySQLWorkBench.model.TransactionHistoryEntity;
 import com.rofat.MySQLWorkBench.model.UserAccountEntity;
@@ -22,13 +23,23 @@ public class TransactionServiceImp implements TransactionService {
     LocalDateTime now = LocalDateTime.now();
 
     @Override   //Cash Out
-    public UserAccountEntity cashOut(int accNum, double amount, boolean isTransfer) {
+    public boolean cashOut(int accNum, double amount, boolean isTransfer) {
         return cashOperation(accNum, amount, isTransfer, true, "Unable to cash-out", TransactionType.CASH_OUT);
     }
 
     @Override   //Cash In
-    public UserAccountEntity cashIn(int accNum, double amount, boolean isTransfer) {
+    public boolean cashIn(int accNum, double amount, boolean isTransfer) {
         return cashOperation(accNum, amount, isTransfer, false, "Unable to cash-in", TransactionType.CASH_IN);
+    }
+
+    @Override
+    public UserAccountEntity cashOutUsr(int accNum, double amount, boolean isTransfer) {
+        return null;
+    }
+
+    @Override
+    public UserAccountEntity cashInUsr(int accNum, double amount, boolean isTransfer) {
+        return null;
     }
 
     @Override   //Transfer Money
@@ -36,6 +47,33 @@ public class TransactionServiceImp implements TransactionService {
         cashIn(recAcc, amount, true);
         cashOut(senderAcc, amount, true);
         TransactionHistoryEntity transactionHistoryEntity = new TransactionHistoryEntity(senderAcc, now, TransactionType.TRANSFER, senderAcc, recAcc, amount);
+        addTransaction(transactionHistoryEntity);
+        return transactionHistoryEntity;
+    }
+
+    @Override //Transfer Money
+    public TransactionHistoryEntity transferMoney(int senderAcc, CurrencyType senderCurrency, double amount, int recAcc, CurrencyType receiverCurrency) {
+        TransactionHistoryEntity transactionHistoryEntity;
+        double finalAmount;
+        double rate = 4000;
+
+        if (senderCurrency == receiverCurrency) {
+            finalAmount = amount;
+            if (cashOut(senderAcc, finalAmount, true)) {
+                cashIn(recAcc, finalAmount, true);
+            }
+        } else if (senderCurrency == CurrencyType.USD) {
+            finalAmount = amount / rate;
+            if (cashOut(senderAcc, finalAmount, true)) {
+                cashIn(recAcc, amount, true);
+            }
+        } else if (senderCurrency == CurrencyType.KHR) {
+            finalAmount = amount * rate;
+            if (cashOut(senderAcc, finalAmount, true)) {
+                cashIn(recAcc, amount, true);
+            }
+        }
+        transactionHistoryEntity = new TransactionHistoryEntity(senderAcc, now, TransactionType.TRANSFER, senderAcc, recAcc, amount);
         addTransaction(transactionHistoryEntity);
         return transactionHistoryEntity;
     }
@@ -52,9 +90,9 @@ public class TransactionServiceImp implements TransactionService {
         }
     }
 
-    private UserAccountEntity cashOperation(int accNum, double amount, boolean isTransfer, boolean isCashOut, String exception_string, TransactionType transactionType) {
+    private boolean cashOperation(int accNum, double amount, boolean isTransfer, boolean isCashOut, String exception_string, TransactionType transactionType) {
         UserAccountEntity userAccountEntity = userAccRepo.getUserAccountByAccountNumber(accNum); //fetch user account
-        double remaining = 0;
+        double remaining;
         try {
             checkAmount(amount); //Check Amount
             if (isCashOut) {
@@ -62,9 +100,9 @@ public class TransactionServiceImp implements TransactionService {
             } else {
                 remaining = userAccountEntity.getBalance() + amount; //Add money to balance
             }
-
             if (remaining < 0) {
-                throw new Exception(exception_string);
+                System.out.println(exception_string);
+                return false;
             } else {
                 userAccountEntity.setBalance(remaining);
                 userAccRepo.save(userAccountEntity);
@@ -72,11 +110,10 @@ public class TransactionServiceImp implements TransactionService {
                     TransactionHistoryEntity transactionHistoryEntity = new TransactionHistoryEntity(accNum, now, transactionType, amount);
                     addTransaction(transactionHistoryEntity);
                 }
-                return userAccountEntity;
+                return true;
             }
-        } catch (Exception exception) {
-            System.out.println(exception);
+        } catch (Exception ignored) {
         }
-        return null;
+        return false;
     }
 }

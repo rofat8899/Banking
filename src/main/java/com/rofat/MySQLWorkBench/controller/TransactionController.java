@@ -23,7 +23,7 @@ public class TransactionController {
         String userPin = (String) obj.get("userPin");
         Boolean validate = userService.validation(userId, userPin);      //validate user
         if (validate) {
-            return transactionService.cashOut(accNum, amount, false);
+            return transactionService.cashOutUsr(accNum, amount, false);
         }
         return null;
     }
@@ -34,7 +34,7 @@ public class TransactionController {
         String userPin = (String) obj.get("userPin");
         Boolean validate = userService.validation(userId, userPin);      //validate user
         if (validate) {
-            return transactionService.cashIn(accNum, amount, false);
+            return transactionService.cashInUsr(accNum, amount, false);
         }
         return null;
     }
