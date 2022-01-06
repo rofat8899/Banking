@@ -52,28 +52,36 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override //Transfer Money
-    public TransactionHistoryEntity transferMoney(int senderAcc, CurrencyType senderCurrency, double amount, int recAcc, CurrencyType receiverCurrency) {
+    public TransactionHistoryEntity transferMoney(int senderAcc, CurrencyType senderCurrency, double amountUSD,double amountKHR, int recAcc, CurrencyType receiverCurrency) {
         TransactionHistoryEntity transactionHistoryEntity;
-        double finalAmount;
-        double rate = 4000;
+        System.out.println(senderCurrency);
+        System.out.println(receiverCurrency);
 
-        if (senderCurrency == receiverCurrency) {
-            finalAmount = amount;
-            if (cashOut(senderAcc, finalAmount, true)) {
-                cashIn(recAcc, finalAmount, true);
+            if(senderCurrency==receiverCurrency && receiverCurrency==CurrencyType.USD)
+            {
+                if (cashOut(senderAcc, amountUSD, true)) {
+                    cashIn(recAcc, amountUSD, true);
+                }
             }
-        } else if (senderCurrency == CurrencyType.USD) {
-            finalAmount = amount / rate;
-            if (cashOut(senderAcc, finalAmount, true)) {
-                cashIn(recAcc, amount, true);
+            else if(senderCurrency==receiverCurrency && receiverCurrency==CurrencyType.KHR)
+            {
+                if (cashOut(senderAcc, amountKHR, true)) {
+                    cashIn(recAcc, amountKHR, true);
+                }
             }
-        } else if (senderCurrency == CurrencyType.KHR) {
-            finalAmount = amount * rate;
-            if (cashOut(senderAcc, finalAmount, true)) {
-                cashIn(recAcc, amount, true);
+            else if(senderCurrency==CurrencyType.KHR && receiverCurrency==CurrencyType.USD)
+            {
+                if (cashOut(senderAcc, amountKHR, true)) {
+                    cashIn(recAcc, amountUSD, true);
+                }
             }
-        }
-        transactionHistoryEntity = new TransactionHistoryEntity(senderAcc, now, TransactionType.TRANSFER, senderAcc, recAcc, amount);
+            else if(senderCurrency==CurrencyType.USD && receiverCurrency==CurrencyType.KHR){
+                if (cashOut(senderAcc, amountUSD, true)) {
+                    cashIn(recAcc, amountKHR, true);
+                }
+            }
+
+        transactionHistoryEntity = new TransactionHistoryEntity(senderAcc, now, TransactionType.TRANSFER, senderAcc, recAcc, amountUSD);
         addTransaction(transactionHistoryEntity);
         return transactionHistoryEntity;
     }
@@ -92,7 +100,8 @@ public class TransactionServiceImp implements TransactionService {
 
     private boolean cashOperation(int accNum, double amount, boolean isTransfer, boolean isCashOut, String exception_string, TransactionType transactionType) {
         UserAccountEntity userAccountEntity = userAccRepo.getUserAccountByAccountNumber(accNum); //fetch user account
-        double remaining;
+        double remaining=0;
+        System.out.println(amount);
         try {
             checkAmount(amount); //Check Amount
             if (isCashOut) {
@@ -102,7 +111,6 @@ public class TransactionServiceImp implements TransactionService {
             }
             if (remaining < 0) {
                 System.out.println(exception_string);
-                return false;
             } else {
                 userAccountEntity.setBalance(remaining);
                 userAccRepo.save(userAccountEntity);

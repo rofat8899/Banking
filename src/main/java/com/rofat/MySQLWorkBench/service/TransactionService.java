@@ -12,5 +12,5 @@ public interface TransactionService {
     UserAccountEntity cashInUsr(int accNum, double amount, boolean isTransfer);
     TransactionHistoryEntity transferMoney(int senderAcc, double amount, int recAcc);
     TransactionHistoryEntity addTransaction(TransactionHistoryEntity transactionHistoryEntity);
-    TransactionHistoryEntity transferMoney(int senderAcc, CurrencyType sendCurrency, double amount, int recAcc, CurrencyType receiverCurrency);
+    TransactionHistoryEntity transferMoney(int senderAcc, CurrencyType sendCurrency, double amountUSD,double amountKHR, int recAcc, CurrencyType receiverCurrency);
 }

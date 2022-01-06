@@ -59,40 +59,58 @@ public class PaymentServiceImp implements PaymentService {
 
 
         if (isValidReceiveAmount(payAmount, receivedMoney, userAccountEntity, amountCurrency)) {
-            Map<String, Object> promotion = havePromotion(promotionsEntityList,userAccountEntity.getCurrencyType() ,amountCurrency,payAmount, receivedMoney);
+            Map<String, Object> promotion = havePromotion(promotionsEntityList, userAccountEntity.getCurrencyType(), amountCurrency, payAmount, receivedMoney);
             boolean isPromotion = (boolean) promotion.get("isPromotion");
-                   //Check for promotion
+            //Check for promotion
             if (isPromotion) {
                 paymentDTO.setPromotionType((String) promotion.get("promotionType"));
                 paymentDTO.setPromotionAmount(promotion.get("promotionAmount") + "(" + promotion.get("promotionValueType") + ")");
                 paymentDTO.setPromotionTotal((double) promotion.get("finalPromotionAmount"));
                 paymentDTO.setChange((double) promotion.get("change"));
                 paymentDTO.setMessage("success");
-                         } else {
+            } else {
                 paymentDTO.setChange(receivedMoney - payAmount);
             }
-                       //Transfer money
-            pay(userAccountEntity, merchantEntity, payAmount);
+            //Transfer money
+            pay(userAccountEntity, merchantEntity, payAmount, amountCurrency);
         } else {
             paymentDTO.setMessage("Invalid amount");
         }
         return paymentDTO;
     }
 
-    private void pay(UserAccountEntity userAccountEntity, MerchantEntity merchantEntity, double payAmount) {
+    private void pay(UserAccountEntity userAccountEntity, MerchantEntity merchantEntity, double payAmount, String amountCurrency) {
+
+        double amountKHR;
+        double amountUSD;
+        boolean isNotComplete = true;
+        if (CurrencyType.USD.toString().contains(amountCurrency)) {
+            amountKHR = payAmount * rate;
+        } else {
+            amountKHR = payAmount;
+        }
+        if (CurrencyType.KHR.toString().contains(amountCurrency)) {
+            amountUSD = payAmount / rate;
+        } else {
+            amountUSD = payAmount;
+        }
         List<UserAccountEntity> userAccountOfMerchant = userAccountService.getUserAccountByMasterAccId(merchantEntity.getMaId());
         for (UserAccountEntity each : userAccountOfMerchant) {
-            if (userAccountEntity.getCurrencyType() == each.getCurrencyType()) {
-                transactionService.transferMoney(userAccountEntity.getAccountNumber(), userAccountEntity.getCurrencyType(), payAmount, each.getAccountNumber(), each.getCurrencyType());
+            if (each.getCurrencyType() == userAccountEntity.getCurrencyType()) {
+                transactionService.transferMoney(userAccountEntity.getAccountNumber(), userAccountEntity.getCurrencyType(), amountUSD, amountKHR, each.getAccountNumber(), each.getCurrencyType());
+                isNotComplete = false;
             }
-            else {
-                transactionService.transferMoney(userAccountEntity.getAccountNumber(), userAccountEntity.getCurrencyType(), payAmount, each.getAccountNumber(), each.getCurrencyType());
+        }
+        if (isNotComplete) {
+            for (UserAccountEntity each : userAccountOfMerchant) {
+                if (each.getCurrencyType() != userAccountEntity.getCurrencyType()) {
+                    transactionService.transferMoney(userAccountEntity.getAccountNumber(), userAccountEntity.getCurrencyType(), amountUSD, amountKHR, each.getAccountNumber(), each.getCurrencyType());
+                }
             }
         }
     }
 
-
-    private Map<String, Object> havePromotion(List<PromotionsEntity> promotionsEntityList,CurrencyType receiveAmountCurrency,String amountCurrency, double payAmount, double receivedMoney) {
+    private Map<String, Object> havePromotion(List<PromotionsEntity> promotionsEntityList, CurrencyType receiveAmountCurrency, String amountCurrency, double payAmount, double receivedMoney) {
         Map<String, Object> obj = new HashMap<>();
         for (PromotionsEntity each : promotionsEntityList) {
             double minPayment = Double.parseDouble(each.getMinPayment());
@@ -104,7 +122,7 @@ public class PaymentServiceImp implements PaymentService {
             long diff_from_end = ChronoUnit.HOURS.between(now, endDate);
             if (diff_from_start > 0 && diff_from_end > 0) {
                 if (minPayment < payAmount && payAmount <= maxPayment) {
-                    return getPromotion(receiveAmountCurrency,each.getPromotionType(), each.getPromotionValueType(), each.getPromotionAmount(), amountCurrency,payAmount, receivedMoney);
+                    return getPromotion(receiveAmountCurrency, each.getPromotionType(), each.getPromotionValueType(), each.getPromotionAmount(), amountCurrency, payAmount, receivedMoney);
                 }
             }
         }
@@ -112,14 +130,14 @@ public class PaymentServiceImp implements PaymentService {
         return obj;
     }
 
-    private Map<String, Object> getPromotion(CurrencyType receiveAmountCurrency,String promotionType, String promotionValueType, String promotionAmount, String amountCurrency,double payAmount, double receivedMoney) {
+    private Map<String, Object> getPromotion(CurrencyType receiveAmountCurrency, String promotionType, String promotionValueType, String promotionAmount, String amountCurrency, double payAmount, double receivedMoney) {
 
         Map<String, Object> obj = new HashMap<>();
         if (promotionType.contains("discount")) {
-            obj = promotionAndAmount(receiveAmountCurrency,promotionValueType, promotionAmount,amountCurrency, payAmount, receivedMoney);
+            obj = promotionAndAmount(receiveAmountCurrency, promotionValueType, promotionAmount, amountCurrency, payAmount, receivedMoney);
         }
         if (promotionType.contains("cash-back")) {
-            obj = promotionAndAmount(receiveAmountCurrency,promotionValueType, promotionAmount, amountCurrency,payAmount, receivedMoney);
+            obj = promotionAndAmount(receiveAmountCurrency, promotionValueType, promotionAmount, amountCurrency, payAmount, receivedMoney);
         }
         obj.put("promotionType", promotionType);
         obj.put("promotionValueType", promotionValueType);
@@ -129,7 +147,7 @@ public class PaymentServiceImp implements PaymentService {
         return obj;
     }
 
-    private Map<String, Object> promotionAndAmount(CurrencyType receiveAmountCurrency,String promotionValueType, String promotionAmount, String amountCurrency,double payAmount, double receivedMoney) {
+    private Map<String, Object> promotionAndAmount(CurrencyType receiveAmountCurrency, String promotionValueType, String promotionAmount, String amountCurrency, double payAmount, double receivedMoney) {
         Map<String, Object> obj = new HashMap<>();
         double finalPromotionAmount = 0.0;
         double finalAmount = 0.0;

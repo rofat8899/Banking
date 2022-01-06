@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.ParseException;
 import java.util.Map;
 
 @RestController
@@ -18,7 +17,7 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @GetMapping("")
-    public PaymentDTO payment(@RequestBody Map<String,Object> request) throws ParseException {
+    public PaymentDTO payment(@RequestBody Map<String,Object> request) throws Exception {
        return paymentService.payment(request);
     }
 }
