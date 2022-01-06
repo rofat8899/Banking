@@ -53,7 +53,7 @@ public class PaymentServiceImp implements PaymentService {
         paymentDTO.setRecievedMoney(receivedMoney);
         if (isPromotion) {
             paymentDTO.setPromotionType((String) promotion.get("promotionType"));
-            paymentDTO.setPromotionAmount((String) promotion.get("promotionAmount"));
+            paymentDTO.setPromotionAmount(promotion.get("promotionAmount") +"("+ promotion.get("promotionValueType") +")");
             paymentDTO.setPromotionTotal((double) promotion.get("finalPromotionAmount"));
             paymentDTO.setAmount(payAmount);
             paymentDTO.setChange((double) promotion.get("change"));
@@ -101,6 +101,7 @@ public class PaymentServiceImp implements PaymentService {
             obj = promotionAndAmount(promotionValueType, promotionAmount, payAmount, receivedMoney);
         }
         obj.put("promotionType", promotionType);
+        obj.put("promotionValueType",promotionValueType);
         obj.put("promotionAmount", promotionAmount);
         obj.put("isPromotion", true);
 
@@ -120,7 +121,7 @@ public class PaymentServiceImp implements PaymentService {
                 finalAmount = payAmount - finalPromotionAmount;
                 break;
             case "fixed-amount":
-                finalPromotionAmount = PromotionValue;
+                finalPromotionAmount =  Double.parseDouble(promotionAmount);
                 finalAmount = payAmount - finalPromotionAmount;
                 break;
         }
