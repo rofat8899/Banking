@@ -54,9 +54,6 @@ public class TransactionServiceImp implements TransactionService {
     @Override //Transfer Money
     public TransactionHistoryEntity transferMoney(int senderAcc, CurrencyType senderCurrency, double amountUSD,double amountKHR, int recAcc, CurrencyType receiverCurrency) {
         TransactionHistoryEntity transactionHistoryEntity;
-        System.out.println(senderCurrency);
-        System.out.println(receiverCurrency);
-
             if(senderCurrency==receiverCurrency && receiverCurrency==CurrencyType.USD)
             {
                 if (cashOut(senderAcc, amountUSD, true)) {
@@ -101,7 +98,6 @@ public class TransactionServiceImp implements TransactionService {
     private boolean cashOperation(int accNum, double amount, boolean isTransfer, boolean isCashOut, String exception_string, TransactionType transactionType) {
         UserAccountEntity userAccountEntity = userAccRepo.getUserAccountByAccountNumber(accNum); //fetch user account
         double remaining=0;
-        System.out.println(amount);
         try {
             checkAmount(amount); //Check Amount
             if (isCashOut) {

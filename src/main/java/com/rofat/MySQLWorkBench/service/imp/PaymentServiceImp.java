@@ -67,10 +67,13 @@ public class PaymentServiceImp implements PaymentService {
                 paymentDTO.setPromotionAmount(promotion.get("promotionAmount") + "(" + promotion.get("promotionValueType") + ")");
                 paymentDTO.setPromotionTotal((double) promotion.get("finalPromotionAmount"));
                 paymentDTO.setChange((double) promotion.get("change"));
-                paymentDTO.setMessage("success");
+
             } else {
-                paymentDTO.setChange(receivedMoney - payAmount);
+                paymentDTO.setPromotionType("N/A");
+                paymentDTO.setPromotionAmount("N/A");
+                paymentDTO.setChange(receivedMoney-convertCurrency(payAmount,userAccountEntity.getCurrencyType(),amountCurrency));
             }
+            paymentDTO.setMessage("success");
             //Transfer money
             pay(userAccountEntity, merchantEntity, payAmount, amountCurrency);
         } else {
@@ -195,4 +198,16 @@ public class PaymentServiceImp implements PaymentService {
         return false;
     }
 
+    private double convertCurrency(double amount, CurrencyType receiveCurrency, String amountCurrency)
+    {
+        if (receiveCurrency.toString().contains(amountCurrency)) {
+            return amount;
+        } else if(!receiveCurrency.toString().contains(amountCurrency) && receiveCurrency==CurrencyType.USD) {
+           return amount/rate;
+        } else if(!receiveCurrency.toString().contains(amountCurrency) && receiveCurrency==CurrencyType.KHR)
+        {
+            return amount*rate;
+        }
+        return amount;
+    }
 }
