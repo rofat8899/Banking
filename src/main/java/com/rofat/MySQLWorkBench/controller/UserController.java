@@ -1,5 +1,6 @@
 package com.rofat.MySQLWorkBench.controller;
 
+import com.rofat.MySQLWorkBench.dto.UserAccountDTO;
 import com.rofat.MySQLWorkBench.dto.UserDTO;
 import com.rofat.MySQLWorkBench.model.UserAccountApproveEntity;
 import com.rofat.MySQLWorkBench.model.UserAccountEntity;
@@ -38,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping()              //Insert User
-    public UserEntity addUser(@RequestBody UserEntity user) {
+    public UserDTO addUser(@RequestBody UserEntity user) {
         return userService.addUser(user);
     }
 
@@ -46,16 +47,16 @@ public class UserController {
     public ResponseEntity<UserDTO> getUserByMasterAccId(@PathVariable Integer id) {
         try {
             UserDTO user = userService.getUserByMasterAccId(id);
-            return new ResponseEntity<UserDTO>(user, HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (NoSuchElementException e) {
-            return new ResponseEntity<UserDTO>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/uid/{id}")          //Get User By UserID
-    public ResponseEntity<UserEntity> getUserByUserId(@PathVariable String id) {
+    public ResponseEntity<UserDTO> getUserByUserId(@PathVariable String id) {
         try {
-            UserEntity user = userService.getUserByUserId(id);
+            UserDTO user = userService.getUserByUserId(id);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -89,7 +90,7 @@ public class UserController {
     }
 
     @GetMapping("/account/{id}")          //Get User By Master Account ID
-    public List<UserAccountEntity> getUserAccountByMasterAccId(@PathVariable Integer id) {
+    public List<UserAccountDTO> getUserAccountByMasterAccId(@PathVariable Integer id) {
         return userAccountService.getUserAccountByMasterAccId(id);
 
     }
@@ -111,7 +112,7 @@ public class UserController {
 
     //Set Default Account
     @PostMapping("/account/default")
-    public UserEntity setDefaultAccount(@RequestBody Map<String, Object> obj) {
+    public UserDTO setDefaultAccount(@RequestBody Map<String, Object> obj) {
         int maId = (int) obj.get("maId");
         int defaultAccount = (int) obj.get("defaultAccount");
         return userService.setDefaultAccount(maId, defaultAccount);
@@ -119,7 +120,7 @@ public class UserController {
 
     //Get Default Account By Master Account ID
     @GetMapping("/account/default/{id}")
-    public UserAccountEntity getDefaultAccount(@PathVariable("id") int maId) {
-        return userService.getDefaultAccount(maId);
+    public UserAccountDTO getDefaultAccount(@PathVariable("id") int maId) {
+        return userAccountService.getDefaultAccountByMasterAccId(maId);
     }
 }

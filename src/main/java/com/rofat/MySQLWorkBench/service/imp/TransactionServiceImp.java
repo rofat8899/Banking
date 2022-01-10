@@ -60,8 +60,8 @@ public class TransactionServiceImp implements TransactionService {
         double amountUSD = 0.0;
         double amountKHR = 0.0;
 
-        UserAccountEntity senderAccount = userAccountService.getUserAccountByAccountNumber(senderAcc);
-        UserAccountEntity receiverAccount = userAccountService.getUserAccountByAccountNumber(recAcc);
+        UserAccountEntity senderAccount = userAccRepo.getUserAccountByAccountNumber(senderAcc);
+        UserAccountEntity receiverAccount = userAccRepo.getUserAccountByAccountNumber(recAcc);
         UserEntity sender = userRepo.getUserByMaId(senderAccount.getMaId());
         UserEntity receiver = userRepo.getUserByMaId(receiverAccount.getMaId());
 

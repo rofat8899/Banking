@@ -13,7 +13,7 @@ public class UserAccountDTO {
     private int accountId;
     private CurrencyType currencyType;
     private int accountNumber;
-    UserAccountDTO(UserAccountEntity userAccountEntity){
+    public UserAccountDTO(UserAccountEntity userAccountEntity){
         this.accountId= userAccountEntity.getId();
         this.currencyType=userAccountEntity.getCurrencyType();
         this.accountNumber=userAccountEntity.getAccountNumber();

@@ -6,6 +6,7 @@ import com.rofat.MySQLWorkBench.dto.UserDTO;
 import com.rofat.MySQLWorkBench.model.MerchantEntity;
 import com.rofat.MySQLWorkBench.model.PromotionsEntity;
 import com.rofat.MySQLWorkBench.model.UserAccountEntity;
+import com.rofat.MySQLWorkBench.repository.UserAccRepo;
 import com.rofat.MySQLWorkBench.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class PaymentServiceImp implements PaymentService {
     private TransactionService transactionService;
     @Autowired
     private PromotionService promotionService;
+    @Autowired
+    private UserAccRepo userAccRepo;
 
     double rate = 4000.0;
 
@@ -41,7 +44,7 @@ public class PaymentServiceImp implements PaymentService {
         LocalDateTime localDateTime = LocalDateTime.now();
 
         //Get Entity
-        UserAccountEntity userAccountEntity = userAccountService.getUserAccountByAccountNumber(accountNumber);
+        UserAccountEntity userAccountEntity = userAccRepo.getUserAccountByAccountNumber(accountNumber);
         MerchantEntity merchantEntity = merchantService.getMerchantByMerchantId(merchantId);
         List<PromotionsEntity> promotionsEntityList = promotionService.findByMasterId(merchantEntity.getMaId());
         //Get DTO
@@ -92,7 +95,7 @@ public class PaymentServiceImp implements PaymentService {
         } else {
             amountUSD = payAmount;
         }
-        List<UserAccountEntity> userAccountOfMerchant = userAccountService.getUserAccountByMasterAccId(merchantEntity.getMaId());
+        List<UserAccountEntity> userAccountOfMerchant = userAccRepo.getUserAccountByMaId(merchantEntity.getMaId());
         for (UserAccountEntity each : userAccountOfMerchant) {
             if (each.getCurrencyType() == userAccountEntity.getCurrencyType()) {
                 if (transactionService.transferMoney(userAccountEntity.getAccountNumber(), userAccountEntity.getCurrencyType(), amountUSD, amountKHR, each.getAccountNumber(), each.getCurrencyType())) {

@@ -4,11 +4,9 @@ import com.rofat.MySQLWorkBench.constant.Role;
 import com.rofat.MySQLWorkBench.dto.UserDTO;
 import com.rofat.MySQLWorkBench.exception.BadRequestException;
 import com.rofat.MySQLWorkBench.model.PinEntity;
-import com.rofat.MySQLWorkBench.model.UserAccountEntity;
 import com.rofat.MySQLWorkBench.model.UserEntity;
 import com.rofat.MySQLWorkBench.repository.PinRepo;
 import com.rofat.MySQLWorkBench.repository.UserRepo;
-import com.rofat.MySQLWorkBench.service.UserAccountService;
 import com.rofat.MySQLWorkBench.service.UserService;
 import lombok.AllArgsConstructor;
 import org.jasypt.util.password.StrongPasswordEncryptor;
@@ -26,21 +24,18 @@ public class UserServiceImp implements UserService {
     @Autowired
     private final PinRepo pinRepo;
 
-    @Autowired
-    private final UserAccountService userAccountService;
-
     @Override
     public List<UserEntity> getAllUser() {
         return userRepo.findAll();
     }
 
     @Override
-    public UserEntity addUser(UserEntity user) {
+    public UserDTO addUser(UserEntity user) {
         Boolean existsUser = userRepo.existsByUserId(user.getUserId());
         if (existsUser) {
             throw new BadRequestException("User existed");
         }
-        return userRepo.save(user);
+        return new UserDTO(userRepo.save(user));
     }
 
     @Override
@@ -50,8 +45,8 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserEntity getUserByUserId(String id) {
-        return userRepo.getUserByUserId(id);
+    public UserDTO getUserByUserId(String id) {
+        return new UserDTO(userRepo.getUserByUserId(id));
     }
 
     @Override
@@ -74,16 +69,10 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserEntity setDefaultAccount(int maId, int defaultAccount) {
+    public UserDTO setDefaultAccount(int maId, int defaultAccount) {
         UserEntity user = userRepo.getUserByMaId(maId);
         user.setDefaultAccount(defaultAccount);
-        return userRepo.save(user);
-    }
-
-    @Override
-    public UserAccountEntity getDefaultAccount(int maId) {
-        UserEntity user = userRepo.getUserByMaId(maId);
-        return userAccountService.getUserAccountByAccountNumberAndMaId(user.getDefaultAccount(), user.getMaId());
+        return new UserDTO( userRepo.save(user));
     }
 
     @Override

@@ -29,7 +29,7 @@ public class SecurityServiceImp implements SecurityService {
     public SecurityEntity generateSecurityCode(String userId, String userPin) {
 
         Boolean validate = userService.validation(userId, userPin);
-        UserEntity user = userService.getUserByUserId(userId);
+        UserEntity user = userRepo.getUserByUserId(userId);
         SecurityEntity existedsecurity = securityRepo.getSecurityByUserId(userId);
         LocalDateTime datetime = LocalDateTime.now();
 
