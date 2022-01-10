@@ -26,7 +26,6 @@ public class AccountController {
     @GetMapping("/{id}")          //Get User By Master Account ID
     public List<UserAccountDTO> getUserAccountByMasterAccId(@PathVariable Integer id) {
         return userAccountService.getUserAccountByMasterAccId(id);
-
     }
 
     @PostMapping("/{id}")
