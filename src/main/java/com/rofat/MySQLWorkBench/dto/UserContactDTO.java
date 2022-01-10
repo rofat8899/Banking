@@ -11,7 +11,7 @@ import lombok.Setter;
 public class UserContactDTO {
     private String phoneNumber;
     private String email;
-    UserContactDTO(UserContactEntity userContactEntity){
+    public UserContactDTO(UserContactEntity userContactEntity){
         this.phoneNumber=userContactEntity.getPhoneNumber();
         this.email=userContactEntity.getEmail();
     }

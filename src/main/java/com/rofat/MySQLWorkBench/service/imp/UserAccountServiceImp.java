@@ -22,18 +22,25 @@ public class UserAccountServiceImp implements UserAccountService {
     private UserRepo userRepo;
 
     @Override
-    public List<UserAccountEntity> getAllUserAccount() {
-        return userAccRepo.findAll();
+    public List<UserAccountDTO> getAllUserAccount()
+    {
+        List<UserAccountDTO> userAccountDTOList= new ArrayList<>();
+        List<UserAccountEntity> userAccountEntities = userAccRepo.findAll();
+        for(UserAccountEntity each: userAccountEntities)
+        {
+            userAccountDTOList.add(new UserAccountDTO(each));
+        }
+        return userAccountDTOList;
     }
 
     @Override
-    public UserAccountEntity addUserAccount_(UserAccountEntity userAccount) {
+    public UserAccountDTO addUserAccount_(UserAccountEntity userAccount) {
         UserAccountEntity userAccount1 = userAccRepo.getUserAccountByAccountNumber(userAccount.getAccountNumber());
 
         if (userAccount1 != null) {
             userAccount.setId(userAccount1.getId());
         }
-        return userAccRepo.save(userAccount);
+        return new UserAccountDTO(userAccRepo.save(userAccount)) ;
     }
 
     @Override

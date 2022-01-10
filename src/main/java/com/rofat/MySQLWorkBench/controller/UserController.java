@@ -1,6 +1,7 @@
 package com.rofat.MySQLWorkBench.controller;
 
 import com.rofat.MySQLWorkBench.dto.UserAccountDTO;
+import com.rofat.MySQLWorkBench.dto.UserContactDTO;
 import com.rofat.MySQLWorkBench.dto.UserDTO;
 import com.rofat.MySQLWorkBench.model.UserAccountApproveEntity;
 import com.rofat.MySQLWorkBench.model.UserAccountEntity;
@@ -65,7 +66,7 @@ public class UserController {
 
     //User Account
     @GetMapping("/account")               //Get All Account
-    public List<UserAccountEntity> getAllAccounts() {
+    public List<UserAccountDTO> getAllAccounts() {
         return userAccountService.getAllUserAccount();
     }
 
@@ -97,7 +98,7 @@ public class UserController {
 
     // User Contact
     @PostMapping("/contact/{uid}")              //Insert User Contact with Master Account ID
-    public UserContactEntity addUserContact(@RequestBody UserContactEntity userContact, @PathVariable("uid") Integer id) {
+    public UserContactDTO addUserContact(@RequestBody UserContactEntity userContact, @PathVariable("uid") Integer id) {
         userContact.setMaId(id);
         return userContactService.addUserContact(userContact);
     }

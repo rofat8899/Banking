@@ -1,10 +1,11 @@
 package com.rofat.MySQLWorkBench.service;
 
+import com.rofat.MySQLWorkBench.dto.UserContactDTO;
 import com.rofat.MySQLWorkBench.model.UserContactEntity;
 
 public interface UserContactService {
 
-    UserContactEntity getUserAddressById(Integer id);
+    UserContactDTO getUserAddressById(Integer id);
 
-    UserContactEntity addUserContact(UserContactEntity userContactEntity);
+    UserContactDTO addUserContact(UserContactEntity userContactEntity);
 }

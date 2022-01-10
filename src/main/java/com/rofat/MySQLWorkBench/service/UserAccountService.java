@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserAccountService {
 
-    List<UserAccountEntity> getAllUserAccount();
+    List<UserAccountDTO> getAllUserAccount();
 
     List<UserAccountDTO> getUserAccountByMasterAccId(Integer id);
 
@@ -15,7 +15,7 @@ public interface UserAccountService {
 
     UserAccountDTO getUserAccountByAccountNumber(Integer accountNumber);
 
-    UserAccountEntity addUserAccount_(UserAccountEntity userAccount);
+    UserAccountDTO addUserAccount_(UserAccountEntity userAccount);
 
     UserAccountDTO getDefaultAccountByMasterAccId(int maId);
 

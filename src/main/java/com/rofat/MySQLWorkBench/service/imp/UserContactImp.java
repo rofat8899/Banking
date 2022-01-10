@@ -1,5 +1,6 @@
 package com.rofat.MySQLWorkBench.service.imp;
 
+import com.rofat.MySQLWorkBench.dto.UserContactDTO;
 import com.rofat.MySQLWorkBench.model.UserContactEntity;
 import com.rofat.MySQLWorkBench.repository.UserContactRepo;
 import com.rofat.MySQLWorkBench.service.UserContactService;
@@ -13,12 +14,12 @@ public class UserContactImp implements UserContactService {
     private UserContactRepo userContactRepo;
 
     @Override
-    public UserContactEntity getUserAddressById(Integer id) {
-        return userContactRepo.findUserContactByMaId(id);
+    public UserContactDTO getUserAddressById(Integer id) {
+        return new UserContactDTO(userContactRepo.findUserContactByMaId(id));
     }
 
     @Override
-    public UserContactEntity addUserContact(UserContactEntity userContactEntity) {
-        return userContactRepo.save(userContactEntity);
+    public UserContactDTO addUserContact(UserContactEntity userContactEntity) {
+        return new UserContactDTO(userContactRepo.save(userContactEntity));
     }
 }
