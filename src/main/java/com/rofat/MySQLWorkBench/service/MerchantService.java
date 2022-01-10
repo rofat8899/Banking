@@ -1,15 +1,16 @@
 package com.rofat.MySQLWorkBench.service;
 
+import com.rofat.MySQLWorkBench.dto.MerchantDTO;
 import com.rofat.MySQLWorkBench.model.MerchantEntity;
 
 import java.util.List;
 
 public interface MerchantService {
-    List<MerchantEntity> getAllMerchant();
+    List<MerchantDTO> getAllMerchant();
 
-    MerchantEntity addMerchant(MerchantEntity merchantEntity);
+    MerchantDTO addMerchant(MerchantEntity merchantEntity);
 
-    MerchantEntity getMerchantByMasterId(int id);
+    MerchantDTO getMerchantByMasterId(int id);
 
-    MerchantEntity getMerchantByMerchantId(String id);
+    MerchantDTO getMerchantByMerchantId(String id);
 }

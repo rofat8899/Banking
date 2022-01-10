@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserService {
 
-    List<UserEntity> getAllUser();
+    List<UserDTO> getAllUser();
     UserDTO getUserByMasterAccId(Integer id);
     UserDTO getUserByUserId(String id);
 

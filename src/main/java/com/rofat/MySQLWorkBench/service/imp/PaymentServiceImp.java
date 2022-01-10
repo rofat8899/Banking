@@ -6,6 +6,8 @@ import com.rofat.MySQLWorkBench.dto.UserDTO;
 import com.rofat.MySQLWorkBench.model.MerchantEntity;
 import com.rofat.MySQLWorkBench.model.PromotionsEntity;
 import com.rofat.MySQLWorkBench.model.UserAccountEntity;
+import com.rofat.MySQLWorkBench.repository.MerchantRepo;
+import com.rofat.MySQLWorkBench.repository.PromotionsRepo;
 import com.rofat.MySQLWorkBench.repository.UserAccRepo;
 import com.rofat.MySQLWorkBench.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +25,14 @@ public class PaymentServiceImp implements PaymentService {
     @Autowired
     private UserService userService;
     @Autowired
-    private UserAccountService userAccountService;
-    @Autowired
-    private MerchantService merchantService;
-    @Autowired
     private TransactionService transactionService;
     @Autowired
-    private PromotionService promotionService;
+    private PromotionsRepo promotionsRepo;
     @Autowired
     private UserAccRepo userAccRepo;
+    @Autowired
+    private MerchantRepo merchantRepo;
+
 
     double rate = 4000.0;
 
@@ -45,8 +46,8 @@ public class PaymentServiceImp implements PaymentService {
 
         //Get Entity
         UserAccountEntity userAccountEntity = userAccRepo.getUserAccountByAccountNumber(accountNumber);
-        MerchantEntity merchantEntity = merchantService.getMerchantByMerchantId(merchantId);
-        List<PromotionsEntity> promotionsEntityList = promotionService.findByMasterId(merchantEntity.getMaId());
+        MerchantEntity merchantEntity = merchantRepo.findMerchantEntityByMerchantId(merchantId);
+        List<PromotionsEntity> promotionsEntityList = promotionsRepo.findPromotionsByMaid(merchantEntity.getMaId());
         //Get DTO
         UserDTO user = userService.getUserByMasterAccId(userAccountEntity.getMaId());
 

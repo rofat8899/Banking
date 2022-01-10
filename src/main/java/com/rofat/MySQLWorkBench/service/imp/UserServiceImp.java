@@ -13,6 +13,7 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -25,8 +26,13 @@ public class UserServiceImp implements UserService {
     private final PinRepo pinRepo;
 
     @Override
-    public List<UserEntity> getAllUser() {
-        return userRepo.findAll();
+    public List<UserDTO> getAllUser() {
+        List<UserDTO> userDTO= new ArrayList<>();
+        for(UserEntity each: userRepo.findAll())
+        {
+            userDTO.add(new UserDTO(each));
+        }
+        return userDTO;
     }
 
     @Override

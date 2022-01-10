@@ -13,7 +13,7 @@ public class PromotionDTO {
     private String promotionType;
     private String promotionValueType;
     private String promotionAmount;
-    PromotionDTO(PromotionsEntity promotionsEntity){
+    public PromotionDTO(PromotionsEntity promotionsEntity){
         this.duration = new DurationDTO(promotionsEntity.getDurationEntity());
         this.minPayment = promotionsEntity.getMinPayment();
         this.maxPayment = promotionsEntity.getMaxPayment();

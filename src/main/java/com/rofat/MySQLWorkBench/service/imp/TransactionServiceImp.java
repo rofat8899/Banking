@@ -3,6 +3,7 @@ package com.rofat.MySQLWorkBench.service.imp;
 import com.rofat.MySQLWorkBench.constant.CurrencyType;
 import com.rofat.MySQLWorkBench.constant.TransactionType;
 import com.rofat.MySQLWorkBench.dto.TransferDTO;
+import com.rofat.MySQLWorkBench.dto.UserAccountDTO;
 import com.rofat.MySQLWorkBench.model.TransactionEntity;
 import com.rofat.MySQLWorkBench.model.UserAccountEntity;
 import com.rofat.MySQLWorkBench.model.UserEntity;
@@ -10,7 +11,6 @@ import com.rofat.MySQLWorkBench.repository.TransactionHistoryRepo;
 import com.rofat.MySQLWorkBench.repository.UserAccRepo;
 import com.rofat.MySQLWorkBench.repository.UserRepo;
 import com.rofat.MySQLWorkBench.service.TransactionService;
-import com.rofat.MySQLWorkBench.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +22,6 @@ public class TransactionServiceImp implements TransactionService {
 
     @Autowired
     private UserRepo userRepo;
-
-    @Autowired
-    private UserAccountService userAccountService;
 
     @Autowired
     private UserAccRepo userAccRepo;
@@ -45,12 +42,12 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override
-    public UserAccountEntity cashOutUsr(int accNum, double amount, boolean isTransfer) {
+    public UserAccountDTO cashOutUsr(int accNum, double amount, boolean isTransfer) {
         return null;
     }
 
     @Override
-    public UserAccountEntity cashInUsr(int accNum, double amount, boolean isTransfer) {
+    public UserAccountDTO cashInUsr(int accNum, double amount, boolean isTransfer) {
         return null;
     }
 
@@ -73,7 +70,7 @@ public class TransactionServiceImp implements TransactionService {
             amountKHR = amount;
         }
         boolean isSucceed = transferMoney(senderAcc, senderAccount.getCurrencyType(), amountUSD, amountKHR, recAcc, receiverAccount.getCurrencyType());
-        return new TransferDTO( amountUSD, amountKHR,sender,receiver,now,isSucceed);
+        return new TransferDTO(amountUSD, amountKHR, sender, receiver, now, isSucceed);
     }
 
     @Override //Transfer Money
@@ -82,33 +79,28 @@ public class TransactionServiceImp implements TransactionService {
         if (senderCurrency == receiverCurrency && receiverCurrency == CurrencyType.USD) {
             if (cashOut(senderAcc, amountUSD, true)) {
                 cashIn(recAcc, amountUSD, true);
-            }
-            else{
+            } else {
                 return false;
             }
         } else if (senderCurrency == receiverCurrency && receiverCurrency == CurrencyType.KHR) {
             if (cashOut(senderAcc, amountKHR, true)) {
                 cashIn(recAcc, amountKHR, true);
-            }
-            else{
+            } else {
                 return false;
             }
         } else if (senderCurrency == CurrencyType.KHR && receiverCurrency == CurrencyType.USD) {
             if (cashOut(senderAcc, amountKHR, true)) {
                 cashIn(recAcc, amountUSD, true);
-            }
-            else{
+            } else {
                 return false;
             }
         } else if (senderCurrency == CurrencyType.USD && receiverCurrency == CurrencyType.KHR) {
             if (cashOut(senderAcc, amountUSD, true)) {
                 cashIn(recAcc, amountKHR, true);
-            }
-            else{
+            } else {
                 return false;
             }
-        }
-        else{
+        } else {
             return false;
         }
 
@@ -140,7 +132,7 @@ public class TransactionServiceImp implements TransactionService {
                 remaining = userAccountEntity.getBalance() + amount; //Add money to balance
             }
             if (remaining < 0) {
-                System.out.println(new Date()+" "+exception_string);
+                System.out.println(new Date() + " " + exception_string);
                 return false;
             } else {
                 userAccountEntity.setBalance(remaining);

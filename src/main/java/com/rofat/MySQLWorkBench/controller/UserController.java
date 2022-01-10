@@ -4,7 +4,6 @@ import com.rofat.MySQLWorkBench.dto.UserAccountDTO;
 import com.rofat.MySQLWorkBench.dto.UserContactDTO;
 import com.rofat.MySQLWorkBench.dto.UserDTO;
 import com.rofat.MySQLWorkBench.model.UserAccountApproveEntity;
-import com.rofat.MySQLWorkBench.model.UserAccountEntity;
 import com.rofat.MySQLWorkBench.model.UserContactEntity;
 import com.rofat.MySQLWorkBench.model.UserEntity;
 import com.rofat.MySQLWorkBench.service.UserAccountApproveService;
@@ -35,7 +34,7 @@ public class UserController {
 
     //User
     @GetMapping()               //Get All Users
-    public List<UserEntity> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         return userService.getAllUser();
     }
 
@@ -84,7 +83,7 @@ public class UserController {
     }
 
     @GetMapping("/account/activate/{id}") //Activate User Account
-    public UserAccountEntity activateUserAccount(@RequestBody Map<String, Object> obj, @PathVariable("id") int accountNumber) {
+    public UserAccountDTO activateUserAccount(@RequestBody Map<String, Object> obj, @PathVariable("id") int accountNumber) {
         String userId = (String) obj.get("userId");
         String userPin = (String) obj.get("userPin");
         return userAccountApproveService.activateUserAccount(userId, userPin, accountNumber);

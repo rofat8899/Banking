@@ -1,9 +1,9 @@
 package com.rofat.MySQLWorkBench.service.imp;
 
+import com.rofat.MySQLWorkBench.dto.UserAccountDTO;
 import com.rofat.MySQLWorkBench.model.UserAccountApproveEntity;
 import com.rofat.MySQLWorkBench.model.UserAccountEntity;
 import com.rofat.MySQLWorkBench.repository.UserAccApproveRepo;
-import com.rofat.MySQLWorkBench.repository.UserAccRepo;
 import com.rofat.MySQLWorkBench.service.UserAccountApproveService;
 import com.rofat.MySQLWorkBench.service.UserAccountService;
 import com.rofat.MySQLWorkBench.service.UserService;
@@ -15,9 +15,6 @@ public class UserAccountApproveServiceImp implements UserAccountApproveService {
 
     @Autowired
     private UserAccApproveRepo userAccApproveRepo;
-
-    @Autowired
-    private UserAccRepo userAccRepo;
 
     @Autowired
     private UserService userService;
@@ -37,7 +34,7 @@ public class UserAccountApproveServiceImp implements UserAccountApproveService {
     }
 
     @Override
-    public UserAccountEntity activateUserAccount(String userId, String userPin, int accountNumber) {
+    public UserAccountDTO activateUserAccount(String userId, String userPin, int accountNumber) {
 
         Boolean validate = userService.validation(userId, userPin);
         Boolean isAdmin = userService.isAdmin(userId);
@@ -51,7 +48,7 @@ public class UserAccountApproveServiceImp implements UserAccountApproveService {
                 updateUserAccountApprove(userAccountApproveEntity);
                 //print
                 System.out.format("Account %d is activated\n", accountNumber);
-                return userAccountEntity;
+                return new UserAccountDTO(userAccountEntity);
             } else {
                 System.out.println("You are not an admin");
             }

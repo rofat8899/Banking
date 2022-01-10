@@ -22,12 +22,9 @@ public class UserAccountServiceImp implements UserAccountService {
     private UserRepo userRepo;
 
     @Override
-    public List<UserAccountDTO> getAllUserAccount()
-    {
-        List<UserAccountDTO> userAccountDTOList= new ArrayList<>();
-        List<UserAccountEntity> userAccountEntities = userAccRepo.findAll();
-        for(UserAccountEntity each: userAccountEntities)
-        {
+    public List<UserAccountDTO> getAllUserAccount() {
+        List<UserAccountDTO> userAccountDTOList = new ArrayList<>();
+        for (UserAccountEntity each : userAccRepo.findAll()) {
             userAccountDTOList.add(new UserAccountDTO(each));
         }
         return userAccountDTOList;
@@ -40,21 +37,19 @@ public class UserAccountServiceImp implements UserAccountService {
         if (userAccount1 != null) {
             userAccount.setId(userAccount1.getId());
         }
-        return new UserAccountDTO(userAccRepo.save(userAccount)) ;
+        return new UserAccountDTO(userAccRepo.save(userAccount));
     }
 
     @Override
     public UserAccountDTO getDefaultAccountByMasterAccId(int maId) {
         UserEntity user = userRepo.getUserByMaId(maId);
-        return new UserAccountDTO(userAccRepo.getUserAccountByAccountNumberAndMaId(user.getDefaultAccount(),user.getMaId()));
+        return new UserAccountDTO(userAccRepo.getUserAccountByAccountNumberAndMaId(user.getDefaultAccount(), user.getMaId()));
     }
 
     @Override
     public List<UserAccountDTO> getUserAccountByMasterAccId(Integer id) {
-        List<UserAccountDTO> userAccountDTOList= new ArrayList<>();
-        List<UserAccountEntity> userAccountEntity = userAccRepo.getUserAccountByMaId(id);
-        for(UserAccountEntity each : userAccountEntity)
-        {
+        List<UserAccountDTO> userAccountDTOList = new ArrayList<>();
+        for (UserAccountEntity each : userAccRepo.getUserAccountByMaId(id)) {
             userAccountDTOList.add(new UserAccountDTO(each));
         }
         return userAccountDTOList;

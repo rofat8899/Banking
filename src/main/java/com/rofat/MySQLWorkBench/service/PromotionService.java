@@ -1,13 +1,14 @@
 package com.rofat.MySQLWorkBench.service;
 
+import com.rofat.MySQLWorkBench.dto.PromotionDTO;
 import com.rofat.MySQLWorkBench.model.PromotionsEntity;
 
 import java.util.List;
 
 public interface PromotionService {
-    List<PromotionsEntity> getAllPromotion();
+    List<PromotionDTO> getAllPromotion();
 
-    PromotionsEntity save(PromotionsEntity promotionsEntity);
+    PromotionDTO save(PromotionsEntity promotionsEntity);
 
-    List<PromotionsEntity> findByMasterId(int maid);
+    List<PromotionDTO> findByMasterId(int maid);
 }

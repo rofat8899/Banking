@@ -36,4 +36,13 @@ public class MerchantDTO {
         }
         this.settlements=finalSettlement;
     }
+    public MerchantDTO(MerchantEntity merchantEntity) {
+        this.merchantId = merchantEntity.getMerchantId();
+        this.id = merchantEntity.getId();
+        this.email = merchantEntity.getEmail();
+        this.phone = merchantEntity.getPhone();
+        this.name = merchantEntity.getName();
+        this.secretKey = merchantEntity.getSecretKey();
+        masterAccountId = merchantEntity.getId();
+    }
 }

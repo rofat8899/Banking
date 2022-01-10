@@ -1,6 +1,7 @@
 package com.rofat.MySQLWorkBench.controller;
 
 import com.rofat.MySQLWorkBench.dto.DataDTO;
+import com.rofat.MySQLWorkBench.dto.PromotionDTO;
 import com.rofat.MySQLWorkBench.model.MerchantEntity;
 import com.rofat.MySQLWorkBench.model.PromotionsEntity;
 import com.rofat.MySQLWorkBench.service.DataService;
@@ -41,20 +42,20 @@ public class DataController {
 
     //Get all Promotion
     @GetMapping("/promotion")
-    public List<PromotionsEntity> getAllPromotions() {
+    public List<PromotionDTO> getAllPromotions() {
         return promotionService.getAllPromotion();
     }
 
     //Insert Promotions with Master ID
     @PostMapping("/promotion/{id}")
-    public PromotionsEntity insertPromotions(@PathVariable("id") int maId, @RequestBody PromotionsEntity promotionsEntity) {
+    public PromotionDTO insertPromotions(@PathVariable("id") int maId, @RequestBody PromotionsEntity promotionsEntity) {
         promotionsEntity.setMaid(maId);
         return promotionService.save(promotionsEntity);
     }
 
     //Get Promotion By Master ID
     @GetMapping("/promotion/{id}")
-    public List<PromotionsEntity> getPromotionByMasterId(@PathVariable("id") int maid) {
+    public List<PromotionDTO> getPromotionByMasterId(@PathVariable("id") int maid) {
         return promotionService.findByMasterId(maid);
     }
 
