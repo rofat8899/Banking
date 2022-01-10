@@ -46,4 +46,9 @@ public class AccountController {
         String userPin = (String) obj.get("userPin");
         return userAccountApproveService.activateUserAccount(userId, userPin, accountNumber);
     }
+    
+    @GetMapping("/default/{id}")
+    public UserAccountDTO getDefaultAccount(@PathVariable("id") int maId) {
+        return userAccountService.getDefaultAccountByMasterAccId(maId);
+    }
 }

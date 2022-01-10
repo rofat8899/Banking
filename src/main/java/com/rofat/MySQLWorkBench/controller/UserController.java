@@ -1,6 +1,5 @@
 package com.rofat.MySQLWorkBench.controller;
 
-import com.rofat.MySQLWorkBench.dto.UserAccountDTO;
 import com.rofat.MySQLWorkBench.dto.UserContactDTO;
 import com.rofat.MySQLWorkBench.dto.UserDTO;
 import com.rofat.MySQLWorkBench.model.UserContactEntity;
@@ -28,8 +27,6 @@ public class UserController {
     @Autowired
     private UserContactService userContactService;
 
-
-    //User
     @GetMapping()               //Get All Users
     public List<UserDTO> getAllUsers() {
         return userService.getAllUser();
@@ -60,14 +57,12 @@ public class UserController {
         }
     }
 
-    // User Contact
     @PostMapping("/contact/{uid}")              //Insert User Contact with Master Account ID
     public UserContactDTO addUserContact(@RequestBody UserContactEntity userContact, @PathVariable("uid") Integer id) {
         userContact.setMaId(id);
         return userContactService.addUserContact(userContact);
     }
 
-    //User validation
     @GetMapping("/validation")      //validate pin
     public Boolean userValidation(@RequestBody Map<String, Object> obj) {
         String userId = (String) obj.get("userId");
@@ -81,11 +76,5 @@ public class UserController {
         int maId = (int) obj.get("maId");
         int defaultAccount = (int) obj.get("defaultAccount");
         return userService.setDefaultAccount(maId, defaultAccount);
-    }
-
-    //Get Default Account By Master Account ID
-    @GetMapping("/account/default/{id}")
-    public UserAccountDTO getDefaultAccount(@PathVariable("id") int maId) {
-        return userAccountService.getDefaultAccountByMasterAccId(maId);
     }
 }
