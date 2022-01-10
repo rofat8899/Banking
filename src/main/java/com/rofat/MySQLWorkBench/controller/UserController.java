@@ -3,10 +3,8 @@ package com.rofat.MySQLWorkBench.controller;
 import com.rofat.MySQLWorkBench.dto.UserAccountDTO;
 import com.rofat.MySQLWorkBench.dto.UserContactDTO;
 import com.rofat.MySQLWorkBench.dto.UserDTO;
-import com.rofat.MySQLWorkBench.model.UserAccountApproveEntity;
 import com.rofat.MySQLWorkBench.model.UserContactEntity;
 import com.rofat.MySQLWorkBench.model.UserEntity;
-import com.rofat.MySQLWorkBench.service.UserAccountApproveService;
 import com.rofat.MySQLWorkBench.service.UserAccountService;
 import com.rofat.MySQLWorkBench.service.UserContactService;
 import com.rofat.MySQLWorkBench.service.UserService;
@@ -29,8 +27,7 @@ public class UserController {
     private UserAccountService userAccountService;
     @Autowired
     private UserContactService userContactService;
-    @Autowired
-    private UserAccountApproveService userAccountApproveService;
+
 
     //User
     @GetMapping()               //Get All Users
@@ -61,38 +58,6 @@ public class UserController {
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
-
-    //User Account
-    @GetMapping("/account")               //Get All Account
-    public List<UserAccountDTO> getAllAccounts() {
-        return userAccountService.getAllUserAccount();
-    }
-
-    //@PutMapping("/account/{id}")                   //Update User with Master ID
-    @PostMapping("/account/{id}")              //Insert User with Master ID
-    public UserAccountApproveEntity addUserAccount(@RequestBody UserAccountApproveEntity userAccountApprove, @PathVariable("id") Integer id) {
-        userAccountApprove.setMaId(id);
-        return userAccountApproveService.addOrUpdateUserAccountApprove_(userAccountApprove);
-    }
-
-    @PutMapping("/account/{id}")        //Delete User Account
-    public String deleteUserAccount(@PathVariable("id") Integer accountNumber) {
-        userAccountService.deleteUserAccount(accountNumber);
-        return "Successfully deleted";
-    }
-
-    @GetMapping("/account/activate/{id}") //Activate User Account
-    public UserAccountDTO activateUserAccount(@RequestBody Map<String, Object> obj, @PathVariable("id") int accountNumber) {
-        String userId = (String) obj.get("userId");
-        String userPin = (String) obj.get("userPin");
-        return userAccountApproveService.activateUserAccount(userId, userPin, accountNumber);
-    }
-
-    @GetMapping("/account/{id}")          //Get User By Master Account ID
-    public List<UserAccountDTO> getUserAccountByMasterAccId(@PathVariable Integer id) {
-        return userAccountService.getUserAccountByMasterAccId(id);
-
     }
 
     // User Contact
