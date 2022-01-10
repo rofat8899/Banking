@@ -1,7 +1,8 @@
 package com.rofat.MySQLWorkBench.service;
 
 import com.rofat.MySQLWorkBench.constant.CurrencyType;
-import com.rofat.MySQLWorkBench.model.TransactionHistoryEntity;
+import com.rofat.MySQLWorkBench.dto.TransferDTO;
+import com.rofat.MySQLWorkBench.model.TransactionEntity;
 import com.rofat.MySQLWorkBench.model.UserAccountEntity;
 
 public interface TransactionService {
@@ -10,7 +11,7 @@ public interface TransactionService {
     boolean cashIn(int accNum, double amount, boolean isTransfer);
     UserAccountEntity cashOutUsr(int accNum, double amount, boolean isTransfer);
     UserAccountEntity cashInUsr(int accNum, double amount, boolean isTransfer);
-    TransactionHistoryEntity transferMoney(int senderAcc, double amount, int recAcc);
-    TransactionHistoryEntity addTransaction(TransactionHistoryEntity transactionHistoryEntity);
-    TransactionHistoryEntity transferMoney(int senderAcc, CurrencyType sendCurrency, double amountUSD,double amountKHR, int recAcc, CurrencyType receiverCurrency);
+    TransferDTO transferMoney(int senderAcc, double amount, int recAcc);
+    TransactionEntity addTransaction(TransactionEntity transactionEntity);
+    boolean transferMoney(int senderAcc, CurrencyType sendCurrency, double amountUSD, double amountKHR, int recAcc, CurrencyType receiverCurrency);
 }

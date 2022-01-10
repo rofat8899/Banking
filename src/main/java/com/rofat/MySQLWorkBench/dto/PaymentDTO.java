@@ -14,9 +14,5 @@ public class PaymentDTO {
     private String promotionAmount;
     private double promotionTotal;
     private double amount;
-    private String amountCurrency;
-    private double recieveAmount;
-    private String receiveAmountCurrency;
-    private double change;
     private String message;
 }

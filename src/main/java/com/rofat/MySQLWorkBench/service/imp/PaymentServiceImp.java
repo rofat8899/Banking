@@ -37,8 +37,6 @@ public class PaymentServiceImp implements PaymentService {
         PaymentDTO paymentDTO = new PaymentDTO();
         int accountNumber = (int) request.get("accountNumber");
         double payAmount = (double) request.get("amount");
-        String amountCurrency = (String) request.get("amountCurrency");
-        double receivedMoney = (double) request.get("receivedMoney");
         String merchantId = (String) request.get("merchantId");
         LocalDateTime localDateTime = LocalDateTime.now();
 
@@ -53,46 +51,43 @@ public class PaymentServiceImp implements PaymentService {
         paymentDTO.setPayBy(user.getName());
         paymentDTO.setPayTo(merchantEntity.getName());
         paymentDTO.setAmount(payAmount);
-        paymentDTO.setAmountCurrency(amountCurrency);
-        paymentDTO.setRecieveAmount(receivedMoney);
-        paymentDTO.setReceiveAmountCurrency(userAccountEntity.getCurrencyType().toString());
-
-
-        if (isValidReceiveAmount(payAmount, receivedMoney, userAccountEntity, amountCurrency)) {
-            Map<String, Object> promotion = havePromotion(promotionsEntityList, userAccountEntity.getCurrencyType(), amountCurrency, payAmount, receivedMoney);
+        if (payAmount > 0) {
+            Map<String, Object> promotion = havePromotion(promotionsEntityList, payAmount);
             boolean isPromotion = (boolean) promotion.get("isPromotion");
             //Check for promotion
             if (isPromotion) {
                 paymentDTO.setPromotionType((String) promotion.get("promotionType"));
                 paymentDTO.setPromotionAmount(promotion.get("promotionAmount") + "(" + promotion.get("promotionValueType") + ")");
                 paymentDTO.setPromotionTotal((double) promotion.get("finalPromotionAmount"));
-                paymentDTO.setChange((double) promotion.get("change"));
+                payAmount = (double) promotion.get("finalAmount");
 
             } else {
                 paymentDTO.setPromotionType("N/A");
                 paymentDTO.setPromotionAmount("N/A");
-                paymentDTO.setChange(receivedMoney-convertCurrency(payAmount,userAccountEntity.getCurrencyType(),amountCurrency));
             }
             paymentDTO.setMessage("success");
             //Transfer money
-            pay(userAccountEntity, merchantEntity, payAmount, amountCurrency);
+            if (!pay(userAccountEntity, merchantEntity, payAmount)) {
+                paymentDTO.setMessage("Unable to transfer");
+            }
+
         } else {
             paymentDTO.setMessage("Invalid amount");
         }
         return paymentDTO;
     }
 
-    private void pay(UserAccountEntity userAccountEntity, MerchantEntity merchantEntity, double payAmount, String amountCurrency) {
+    private boolean pay(UserAccountEntity userAccountEntity, MerchantEntity merchantEntity, double payAmount) {
 
         double amountKHR;
         double amountUSD;
         boolean isNotComplete = true;
-        if (CurrencyType.USD.toString().contains(amountCurrency)) {
+        if (userAccountEntity.getCurrencyType() == CurrencyType.USD) {
             amountKHR = payAmount * rate;
         } else {
             amountKHR = payAmount;
         }
-        if (CurrencyType.KHR.toString().contains(amountCurrency)) {
+        if (userAccountEntity.getCurrencyType() == CurrencyType.KHR) {
             amountUSD = payAmount / rate;
         } else {
             amountUSD = payAmount;
@@ -100,20 +95,25 @@ public class PaymentServiceImp implements PaymentService {
         List<UserAccountEntity> userAccountOfMerchant = userAccountService.getUserAccountByMasterAccId(merchantEntity.getMaId());
         for (UserAccountEntity each : userAccountOfMerchant) {
             if (each.getCurrencyType() == userAccountEntity.getCurrencyType()) {
-                transactionService.transferMoney(userAccountEntity.getAccountNumber(), userAccountEntity.getCurrencyType(), amountUSD, amountKHR, each.getAccountNumber(), each.getCurrencyType());
+                if (transactionService.transferMoney(userAccountEntity.getAccountNumber(), userAccountEntity.getCurrencyType(), amountUSD, amountKHR, each.getAccountNumber(), each.getCurrencyType())) {
+                    return true;
+                }
                 isNotComplete = false;
             }
         }
         if (isNotComplete) {
             for (UserAccountEntity each : userAccountOfMerchant) {
                 if (each.getCurrencyType() != userAccountEntity.getCurrencyType()) {
-                    transactionService.transferMoney(userAccountEntity.getAccountNumber(), userAccountEntity.getCurrencyType(), amountUSD, amountKHR, each.getAccountNumber(), each.getCurrencyType());
+                    if (transactionService.transferMoney(userAccountEntity.getAccountNumber(), userAccountEntity.getCurrencyType(), amountUSD, amountKHR, each.getAccountNumber(), each.getCurrencyType())) {
+                        return true;
+                    }
                 }
             }
         }
+        return false;
     }
 
-    private Map<String, Object> havePromotion(List<PromotionsEntity> promotionsEntityList, CurrencyType receiveAmountCurrency, String amountCurrency, double payAmount, double receivedMoney) {
+    private Map<String, Object> havePromotion(List<PromotionsEntity> promotionsEntityList, double amount) {
         Map<String, Object> obj = new HashMap<>();
         for (PromotionsEntity each : promotionsEntityList) {
             double minPayment = Double.parseDouble(each.getMinPayment());
@@ -124,8 +124,8 @@ public class PaymentServiceImp implements PaymentService {
             long diff_from_start = ChronoUnit.HOURS.between(startDate, now);
             long diff_from_end = ChronoUnit.HOURS.between(now, endDate);
             if (diff_from_start > 0 && diff_from_end > 0) {
-                if (minPayment < payAmount && payAmount <= maxPayment) {
-                    return getPromotion(receiveAmountCurrency, each.getPromotionType(), each.getPromotionValueType(), each.getPromotionAmount(), amountCurrency, payAmount, receivedMoney);
+                if (minPayment < amount && amount <= maxPayment) {
+                    return getPromotion(each.getPromotionType(), each.getPromotionValueType(), each.getPromotionAmount(), amount);
                 }
             }
         }
@@ -133,14 +133,14 @@ public class PaymentServiceImp implements PaymentService {
         return obj;
     }
 
-    private Map<String, Object> getPromotion(CurrencyType receiveAmountCurrency, String promotionType, String promotionValueType, String promotionAmount, String amountCurrency, double payAmount, double receivedMoney) {
+    private Map<String, Object> getPromotion(String promotionType, String promotionValueType, String promotionAmount, double amount) {
 
         Map<String, Object> obj = new HashMap<>();
         if (promotionType.contains("discount")) {
-            obj = promotionAndAmount(receiveAmountCurrency, promotionValueType, promotionAmount, amountCurrency, payAmount, receivedMoney);
+            obj = promotionAndAmount(promotionValueType, promotionAmount, amount);
         }
         if (promotionType.contains("cash-back")) {
-            obj = promotionAndAmount(receiveAmountCurrency, promotionValueType, promotionAmount, amountCurrency, payAmount, receivedMoney);
+            obj = promotionAndAmount(promotionValueType, promotionAmount, amount);
         }
         obj.put("promotionType", promotionType);
         obj.put("promotionValueType", promotionValueType);
@@ -150,64 +150,25 @@ public class PaymentServiceImp implements PaymentService {
         return obj;
     }
 
-    private Map<String, Object> promotionAndAmount(CurrencyType receiveAmountCurrency, String promotionValueType, String promotionAmount, String amountCurrency, double payAmount, double receivedMoney) {
+    private Map<String, Object> promotionAndAmount(String promotionValueType, String promotionAmount, double amount) {
         Map<String, Object> obj = new HashMap<>();
         double finalPromotionAmount = 0.0;
         double finalAmount = 0.0;
         double PromotionValue = Double.parseDouble(promotionAmount.replace("%", ".0")) / 100.0;
-        double change;
 
-        if (!receiveAmountCurrency.toString().equals(amountCurrency)) {
-            if (amountCurrency.equals(CurrencyType.USD.toString())) {
-                receivedMoney = receivedMoney / rate;
-
-            } else if (amountCurrency.equals(CurrencyType.KHR.toString())) {
-                receivedMoney = receivedMoney * rate;
-            }
-        }
         switch (promotionValueType) {
             case "percentage":
-                finalPromotionAmount = payAmount * PromotionValue;
-                finalAmount = payAmount - finalPromotionAmount;
+                finalPromotionAmount = amount * PromotionValue;
+                finalAmount = amount - finalPromotionAmount;
                 break;
             case "fixed-amount":
                 finalPromotionAmount = Double.parseDouble(promotionAmount);
-                finalAmount = payAmount - finalPromotionAmount;
+                finalAmount = amount - finalPromotionAmount;
                 break;
         }
-        change = receivedMoney - finalAmount;
-        obj.put("change", change);
+
         obj.put("finalPromotionAmount", finalPromotionAmount);
         obj.put("finalAmount", finalAmount);
         return obj;
-    }
-
-    private boolean isValidReceiveAmount(double amount, double receiveAmount, UserAccountEntity userAccountEntity, String amountCurrency) {
-
-        if (userAccountEntity.getCurrencyType().toString().equals(amountCurrency)) {
-            return amount < receiveAmount;
-        } else {
-            if (amountCurrency.equals(CurrencyType.USD.toString())) {
-                receiveAmount = receiveAmount / rate;
-                return amount < receiveAmount;
-            } else if (amountCurrency.equals(CurrencyType.KHR.toString())) {
-                receiveAmount = receiveAmount * rate;
-                return amount < receiveAmount;
-            }
-        }
-        return false;
-    }
-
-    private double convertCurrency(double amount, CurrencyType receiveCurrency, String amountCurrency)
-    {
-        if (receiveCurrency.toString().contains(amountCurrency)) {
-            return amount;
-        } else if(!receiveCurrency.toString().contains(amountCurrency) && receiveCurrency==CurrencyType.USD) {
-           return amount/rate;
-        } else if(!receiveCurrency.toString().contains(amountCurrency) && receiveCurrency==CurrencyType.KHR)
-        {
-            return amount*rate;
-        }
-        return amount;
     }
 }

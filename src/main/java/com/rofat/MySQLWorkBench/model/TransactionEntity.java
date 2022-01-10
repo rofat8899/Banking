@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Table(name = "TRANSACTION_HISTORY")
-public class TransactionHistoryEntity {
+public class TransactionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="ID")
@@ -31,14 +31,14 @@ public class TransactionHistoryEntity {
     @Column(name="AMOUNT")
     private double amount;
 
-    public TransactionHistoryEntity(int createdBy, LocalDateTime localDateTime, TransactionType transactionType, double amount) {
+    public TransactionEntity(int createdBy, LocalDateTime localDateTime, TransactionType transactionType, double amount) {
         this.createdBy = createdBy;
         this.localDateTime = localDateTime;
         this.transactionType = transactionType;
         this.amount = amount;
     }
 
-    public TransactionHistoryEntity(int createdBy, LocalDateTime localDateTime, TransactionType transactionType, int senderId, int receiverId, double amount) {
+    public TransactionEntity(int createdBy, LocalDateTime localDateTime, TransactionType transactionType, int senderId, int receiverId, double amount) {
         this.createdBy = createdBy;
         this.localDateTime = localDateTime;
         this.transactionType = transactionType;

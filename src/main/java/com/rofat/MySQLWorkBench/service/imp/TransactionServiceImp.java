@@ -2,18 +2,30 @@ package com.rofat.MySQLWorkBench.service.imp;
 
 import com.rofat.MySQLWorkBench.constant.CurrencyType;
 import com.rofat.MySQLWorkBench.constant.TransactionType;
-import com.rofat.MySQLWorkBench.model.TransactionHistoryEntity;
+import com.rofat.MySQLWorkBench.dto.TransferDTO;
+import com.rofat.MySQLWorkBench.model.TransactionEntity;
 import com.rofat.MySQLWorkBench.model.UserAccountEntity;
+import com.rofat.MySQLWorkBench.model.UserEntity;
 import com.rofat.MySQLWorkBench.repository.TransactionHistoryRepo;
 import com.rofat.MySQLWorkBench.repository.UserAccRepo;
+import com.rofat.MySQLWorkBench.repository.UserRepo;
 import com.rofat.MySQLWorkBench.service.TransactionService;
+import com.rofat.MySQLWorkBench.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 public class TransactionServiceImp implements TransactionService {
+
+    @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
+    private UserAccountService userAccountService;
+
     @Autowired
     private UserAccRepo userAccRepo;
 
@@ -43,49 +55,71 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override   //Transfer Money
-    public TransactionHistoryEntity transferMoney(int senderAcc, double amount, int recAcc) {
-        cashIn(recAcc, amount, true);
-        cashOut(senderAcc, amount, true);
-        TransactionHistoryEntity transactionHistoryEntity = new TransactionHistoryEntity(senderAcc, now, TransactionType.TRANSFER, senderAcc, recAcc, amount);
-        addTransaction(transactionHistoryEntity);
-        return transactionHistoryEntity;
+    public TransferDTO transferMoney(int senderAcc, double amount, int recAcc) {
+        double rate = 4000.0;
+        double amountUSD = 0.0;
+        double amountKHR = 0.0;
+
+        UserAccountEntity senderAccount = userAccountService.getUserAccountByAccountNumber(senderAcc);
+        UserAccountEntity receiverAccount = userAccountService.getUserAccountByAccountNumber(recAcc);
+        UserEntity sender = userRepo.getUserByMaId(senderAccount.getMaId());
+        UserEntity receiver = userRepo.getUserByMaId(receiverAccount.getMaId());
+
+        if (senderAccount.getCurrencyType() == CurrencyType.USD) {
+            amountUSD = amount;
+            amountKHR = amount * rate;
+        } else if (senderAccount.getCurrencyType() == CurrencyType.KHR) {
+            amountUSD = amount / rate;
+            amountKHR = amount;
+        }
+        boolean isSucceed = transferMoney(senderAcc, senderAccount.getCurrencyType(), amountUSD, amountKHR, recAcc, receiverAccount.getCurrencyType());
+        return new TransferDTO( amountUSD, amountKHR,sender,receiver,now,isSucceed);
     }
 
     @Override //Transfer Money
-    public TransactionHistoryEntity transferMoney(int senderAcc, CurrencyType senderCurrency, double amountUSD,double amountKHR, int recAcc, CurrencyType receiverCurrency) {
-        TransactionHistoryEntity transactionHistoryEntity;
-            if(senderCurrency==receiverCurrency && receiverCurrency==CurrencyType.USD)
-            {
-                if (cashOut(senderAcc, amountUSD, true)) {
-                    cashIn(recAcc, amountUSD, true);
-                }
+    public boolean transferMoney(int senderAcc, CurrencyType senderCurrency, double amountUSD, double amountKHR, int recAcc, CurrencyType receiverCurrency) {
+        TransactionEntity transactionEntity;
+        if (senderCurrency == receiverCurrency && receiverCurrency == CurrencyType.USD) {
+            if (cashOut(senderAcc, amountUSD, true)) {
+                cashIn(recAcc, amountUSD, true);
             }
-            else if(senderCurrency==receiverCurrency && receiverCurrency==CurrencyType.KHR)
-            {
-                if (cashOut(senderAcc, amountKHR, true)) {
-                    cashIn(recAcc, amountKHR, true);
-                }
+            else{
+                return false;
             }
-            else if(senderCurrency==CurrencyType.KHR && receiverCurrency==CurrencyType.USD)
-            {
-                if (cashOut(senderAcc, amountKHR, true)) {
-                    cashIn(recAcc, amountUSD, true);
-                }
+        } else if (senderCurrency == receiverCurrency && receiverCurrency == CurrencyType.KHR) {
+            if (cashOut(senderAcc, amountKHR, true)) {
+                cashIn(recAcc, amountKHR, true);
             }
-            else if(senderCurrency==CurrencyType.USD && receiverCurrency==CurrencyType.KHR){
-                if (cashOut(senderAcc, amountUSD, true)) {
-                    cashIn(recAcc, amountKHR, true);
-                }
+            else{
+                return false;
             }
+        } else if (senderCurrency == CurrencyType.KHR && receiverCurrency == CurrencyType.USD) {
+            if (cashOut(senderAcc, amountKHR, true)) {
+                cashIn(recAcc, amountUSD, true);
+            }
+            else{
+                return false;
+            }
+        } else if (senderCurrency == CurrencyType.USD && receiverCurrency == CurrencyType.KHR) {
+            if (cashOut(senderAcc, amountUSD, true)) {
+                cashIn(recAcc, amountKHR, true);
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
 
-        transactionHistoryEntity = new TransactionHistoryEntity(senderAcc, now, TransactionType.TRANSFER, senderAcc, recAcc, amountUSD);
-        addTransaction(transactionHistoryEntity);
-        return transactionHistoryEntity;
+        transactionEntity = new TransactionEntity(senderAcc, now, TransactionType.TRANSFER, senderAcc, recAcc, amountUSD);
+        addTransaction(transactionEntity);
+        return true;
     }
 
     @Override   //Add transaction
-    public TransactionHistoryEntity addTransaction(TransactionHistoryEntity transactionHistoryEntity) {
-        return transactionHistoryRepo.save(transactionHistoryEntity);
+    public TransactionEntity addTransaction(TransactionEntity transactionEntity) {
+        return transactionHistoryRepo.save(transactionEntity);
     }
 
     //Check Amount
@@ -97,7 +131,7 @@ public class TransactionServiceImp implements TransactionService {
 
     private boolean cashOperation(int accNum, double amount, boolean isTransfer, boolean isCashOut, String exception_string, TransactionType transactionType) {
         UserAccountEntity userAccountEntity = userAccRepo.getUserAccountByAccountNumber(accNum); //fetch user account
-        double remaining=0;
+        double remaining = 0;
         try {
             checkAmount(amount); //Check Amount
             if (isCashOut) {
@@ -106,13 +140,14 @@ public class TransactionServiceImp implements TransactionService {
                 remaining = userAccountEntity.getBalance() + amount; //Add money to balance
             }
             if (remaining < 0) {
-                System.out.println(exception_string);
+                System.out.println(new Date()+" "+exception_string);
+                return false;
             } else {
                 userAccountEntity.setBalance(remaining);
                 userAccRepo.save(userAccountEntity);
                 if (!isTransfer) {
-                    TransactionHistoryEntity transactionHistoryEntity = new TransactionHistoryEntity(accNum, now, transactionType, amount);
-                    addTransaction(transactionHistoryEntity);
+                    TransactionEntity transactionEntity = new TransactionEntity(accNum, now, transactionType, amount);
+                    addTransaction(transactionEntity);
                 }
                 return true;
             }
