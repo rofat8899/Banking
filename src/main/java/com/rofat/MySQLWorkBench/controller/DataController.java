@@ -1,6 +1,7 @@
 package com.rofat.MySQLWorkBench.controller;
 
 import com.rofat.MySQLWorkBench.dto.DataDTO;
+import com.rofat.MySQLWorkBench.dto.MerchantDTO;
 import com.rofat.MySQLWorkBench.dto.PromotionDTO;
 import com.rofat.MySQLWorkBench.model.MerchantEntity;
 import com.rofat.MySQLWorkBench.model.PromotionsEntity;
@@ -24,19 +25,19 @@ public class DataController {
 
     //Get all Merchant
     @GetMapping("/merchant")
-    public List<MerchantEntity> getAllMerchant() {
+    public List<MerchantDTO> getAllMerchant() {
         return merchantService.getAllMerchant();
     }
 
     //Insert Merchant
     @PostMapping("/merchant")
-    public MerchantEntity addMerchant(@RequestBody MerchantEntity merchantEntity) {
+    public MerchantDTO addMerchant(@RequestBody MerchantEntity merchantEntity) {
         return merchantService.addMerchant(merchantEntity);
     }
 
     //Find Merchant by Master ID
     @GetMapping("/merchant/{id}")
-    public MerchantEntity getMerchantByMasterId(@PathVariable("id") int id) {
+    public MerchantDTO getMerchantByMasterId(@PathVariable("id") int id) {
         return merchantService.getMerchantByMasterId(id);
     }
 
