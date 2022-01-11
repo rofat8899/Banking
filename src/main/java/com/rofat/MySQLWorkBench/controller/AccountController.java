@@ -42,9 +42,9 @@ public class AccountController {
 
     @GetMapping("/activate/{id}") //Activate User Account
     public UserAccountDTO activateUserAccount(@RequestBody Map<String, Object> obj, @PathVariable("id") int accountNumber) {
-        String userId = (String) obj.get("userId");
-        String userPin = (String) obj.get("userPin");
-        return userAccountApproveService.activateUserAccount(userId, userPin, accountNumber);
+
+
+        return userAccountApproveService.activateUserAccount(obj, accountNumber);
     }
 
     @GetMapping("/default/{id}")

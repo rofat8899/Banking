@@ -2,8 +2,10 @@ package com.rofat.MySQLWorkBench.service;
 
 import com.rofat.MySQLWorkBench.model.SecurityEntity;
 
-public interface SecurityService {
-    SecurityEntity generateSecurityCode(String userId, String userPin);
+import java.util.Map;
 
-    Boolean validateSecureCode(String code, String userId);
+public interface SecurityService {
+    SecurityEntity generateSecurityCode(Map<String, Object> obj);
+
+    Boolean validateSecureCode(Map<String, Object> obj);
 }

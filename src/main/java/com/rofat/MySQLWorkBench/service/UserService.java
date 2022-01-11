@@ -4,6 +4,7 @@ import com.rofat.MySQLWorkBench.dto.UserDTO;
 import com.rofat.MySQLWorkBench.model.UserEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -15,6 +16,6 @@ public interface UserService {
     UserDTO addUser(UserEntity user);
     UserDTO setDefaultAccount(int maId, int defaultAccount);
 
-    Boolean validation(String id, String pin);
+    Boolean validation(Map<String,Object> obj);
     Boolean isAdmin(String id);
 }

@@ -1,6 +1,7 @@
 package com.rofat.MySQLWorkBench.controller;
 
 import com.rofat.MySQLWorkBench.dto.PinCodeDTO;
+import com.rofat.MySQLWorkBench.dto.ResponseMessageDTO;
 import com.rofat.MySQLWorkBench.model.PinEntity;
 import com.rofat.MySQLWorkBench.service.PinService;
 import com.rofat.MySQLWorkBench.service.UserService;
@@ -32,10 +33,17 @@ public class PinController {
         return pinService.findAll();
     }
 
+//    @GetMapping("/validation")      //validate pin
+//    public Boolean userValidation(@RequestBody Map<String, Object> obj) {
+//        String userId = (String) obj.get("userId");
+//        String userPin = (String) obj.get("userPin");
+//        return userService.validation(userId, userPin);
+//    }
+
     @GetMapping("/validation")      //validate pin
-    public Boolean userValidation(@RequestBody Map<String, Object> obj) {
+    public ResponseMessageDTO userValidation(@RequestBody Map<String, Object> obj) {
         String userId = (String) obj.get("userId");
         String userPin = (String) obj.get("userPin");
-        return userService.validation(userId, userPin);
+        return pinService.validatePinCode(obj);
     }
 }

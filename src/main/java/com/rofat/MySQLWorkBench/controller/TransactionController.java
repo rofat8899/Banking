@@ -19,9 +19,7 @@ public class TransactionController {
 
     @PutMapping("/cashout/{id}")    //Cash Out
     public AccountBalanceDTO cashOut(@PathVariable("id") int accNum, @RequestParam double amount, @RequestBody Map<String, Object> obj) {
-        String userId = (String) obj.get("userId");
-        String userPin = (String) obj.get("userPin");
-        Boolean validate = userService.validation(userId, userPin);      //validate user
+        Boolean validate = userService.validation(obj);      //validate user
         if (validate) {
             return transactionService.cashOutUsr(accNum, amount, false);
         }
@@ -30,9 +28,7 @@ public class TransactionController {
 
     @PutMapping("/cashin/{id}")     //Cash In
     public AccountBalanceDTO cashIn(@PathVariable("id") int accNum, @RequestParam double amount, @RequestBody Map<String, Object> obj) {
-        String userId = (String) obj.get("userId");
-        String userPin = (String) obj.get("userPin");
-        Boolean validate = userService.validation(userId, userPin);      //validate user
+        Boolean validate = userService.validation(obj);      //validate user
         if (validate) {
             return transactionService.cashInUsr(accNum, amount, false);
         }
@@ -41,9 +37,7 @@ public class TransactionController {
 
     @PutMapping("/transfer/{id}")   //Transfer Money
     public TransferDTO transferMoney(@PathVariable("id") int sender, @RequestParam double amount, @RequestParam(name = "sendTo") int sendTo, @RequestBody Map<String, Object> obj) throws Exception {
-        String userId = (String) obj.get("userId");
-        String userPin = (String) obj.get("userPin");
-        Boolean validate = userService.validation(userId, userPin);      //validate user
+        Boolean validate = userService.validation(obj);      //validate user
         if (validate) {
             return transactionService.transferMoney(sender, amount, sendTo);
         }

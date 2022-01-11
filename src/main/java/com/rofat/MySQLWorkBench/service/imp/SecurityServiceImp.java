@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -26,9 +27,9 @@ public class SecurityServiceImp implements SecurityService {
     private UserService userService;
 
     @Override
-    public SecurityEntity generateSecurityCode(String userId, String userPin) {
-
-        Boolean validate = userService.validation(userId, userPin);
+    public SecurityEntity generateSecurityCode(Map<String,Object> obj) {
+        String userId = (String) obj.get("userId");
+        Boolean validate = userService.validation(obj);
         UserEntity user = userRepo.getUserByUserId(userId);
         SecurityEntity existedsecurity = securityRepo.getSecurityByUserId(userId);
         LocalDateTime datetime = LocalDateTime.now();
@@ -69,7 +70,9 @@ public class SecurityServiceImp implements SecurityService {
     }
 
     @Override
-    public Boolean validateSecureCode(String code, String userId) {
+    public Boolean validateSecureCode(Map<String,Object> obj) {
+        String userId = (String) obj.get("userId");
+        String code = (String) obj.get("userPin");
         Boolean existsUser = userRepo.existsByUserId(userId);
         SecurityEntity securityEntity = securityRepo.getSecurityByUserId(userId);
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();

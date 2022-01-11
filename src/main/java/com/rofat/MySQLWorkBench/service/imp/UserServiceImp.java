@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @Service
@@ -56,7 +57,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Boolean validation(String id, String pin) {
+    public Boolean validation(Map<String,Object> obj) {
+        String id = (String) obj.get("userId");
+        String pin = (String) obj.get("userPin");
         Boolean existsUser = userRepo.existsByUserId(id); //check if database containing user or not
         PinEntity pinEntity1 = pinRepo.findPinByUserId(id);  //fetch data from pin table by id
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();

@@ -1,6 +1,7 @@
 package com.rofat.MySQLWorkBench.service.imp;
 
 import com.rofat.MySQLWorkBench.dto.PinCodeDTO;
+import com.rofat.MySQLWorkBench.dto.ResponseMessageDTO;
 import com.rofat.MySQLWorkBench.exception.BadRequestException;
 import com.rofat.MySQLWorkBench.model.PinEntity;
 import com.rofat.MySQLWorkBench.repository.PinRepo;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PinServiceImp implements PinService {
@@ -54,5 +56,10 @@ public class PinServiceImp implements PinService {
             pinCodeDTO.add(new PinCodeDTO(each));
         }
         return pinCodeDTO;
+    }
+
+    @Override
+    public ResponseMessageDTO validatePinCode(Map<String,Object> obj) {
+        return null;
     }
 }

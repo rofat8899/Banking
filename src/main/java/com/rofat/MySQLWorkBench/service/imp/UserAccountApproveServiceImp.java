@@ -10,6 +10,8 @@ import com.rofat.MySQLWorkBench.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class UserAccountApproveServiceImp implements UserAccountApproveService {
 
@@ -34,9 +36,9 @@ public class UserAccountApproveServiceImp implements UserAccountApproveService {
     }
 
     @Override
-    public UserAccountDTO activateUserAccount(String userId, String userPin, int accountNumber) {
-
-        Boolean validate = userService.validation(userId, userPin);
+    public UserAccountDTO activateUserAccount(Map<String,Object> obj, int accountNumber) {
+        String userId = (String) obj.get("userId");
+        Boolean validate = userService.validation(obj);
         Boolean isAdmin = userService.isAdmin(userId);
         if (validate) {
             if (isAdmin) {
