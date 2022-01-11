@@ -36,7 +36,7 @@ public class PinServiceImp implements PinService {
                 String encryptedPassword = passwordEncryptor.encryptPassword(pinEntity.getPin());
                 pinEntity.setPin(encryptedPassword);
                 System.out.println("Pin is adding now");
-                return new PinCodeDTO(pinRepo.save(pinEntity)) ;
+                return new PinCodeDTO(pinRepo.save(pinEntity));
             }
             System.out.println("User and pin is existed ");
             throw new BadRequestException("Pin existed");
@@ -46,26 +46,24 @@ public class PinServiceImp implements PinService {
 
     @Override
     public PinCodeDTO findByUserId(String id) {
-        return new PinCodeDTO(pinRepo.findPinByUserId(id)) ;
+        return new PinCodeDTO(pinRepo.findPinByUserId(id));
     }
 
     @Override
     public List<PinCodeDTO> findAll() {
-        List<PinEntity> pinEntities=pinRepo.findAll();
+        List<PinEntity> pinEntities = pinRepo.findAll();
         List<PinCodeDTO> pinCodeDTO = new ArrayList<>();
-        for(PinEntity each:pinEntities)
-        {
+        for (PinEntity each : pinEntities) {
             pinCodeDTO.add(new PinCodeDTO(each));
         }
         return pinCodeDTO;
     }
 
     @Override
-    public ResponseMessageDTO validatePinCode(Map<String,Object> obj) {
-        if(userService.validation(obj)){
+    public ResponseMessageDTO validatePinCode(Map<String, Object> obj) {
+        if (userService.validation(obj)) {
             return new ResponseMessageDTO("Success");
-        }
-        else{
+        } else {
             return new ResponseMessageDTO("failed");
         }
     }

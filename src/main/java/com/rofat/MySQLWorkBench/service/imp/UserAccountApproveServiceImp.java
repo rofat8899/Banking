@@ -36,7 +36,7 @@ public class UserAccountApproveServiceImp implements UserAccountApproveService {
     }
 
     @Override
-    public UserAccountDTO activateUserAccount(Map<String,Object> obj, int accountNumber) {
+    public UserAccountDTO activateUserAccount(Map<String, Object> obj, int accountNumber) {
         String userId = (String) obj.get("userId");
         Boolean validate = userService.validation(obj);
         Boolean isAdmin = userService.isAdmin(userId);

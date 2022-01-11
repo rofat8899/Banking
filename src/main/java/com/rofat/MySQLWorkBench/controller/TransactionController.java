@@ -17,27 +17,27 @@ public class TransactionController {
     @Autowired
     private UserService userService;
 
-    @PutMapping("/cashout/{id}")    //Cash Out
+    @PutMapping("/cashout/{id}")
     public AccountBalanceDTO cashOut(@PathVariable("id") int accNum, @RequestParam double amount, @RequestBody Map<String, Object> obj) {
-        Boolean validate = userService.validation(obj);      //validate user
+        Boolean validate = userService.validation(obj);
         if (validate) {
             return transactionService.cashOutUsr(accNum, amount, false);
         }
         return null;
     }
 
-    @PutMapping("/cashin/{id}")     //Cash In
+    @PutMapping("/cashin/{id}")
     public AccountBalanceDTO cashIn(@PathVariable("id") int accNum, @RequestParam double amount, @RequestBody Map<String, Object> obj) {
-        Boolean validate = userService.validation(obj);      //validate user
+        Boolean validate = userService.validation(obj);
         if (validate) {
             return transactionService.cashInUsr(accNum, amount, false);
         }
         return null;
     }
 
-    @PutMapping("/transfer/{id}")   //Transfer Money
+    @PutMapping("/transfer/{id}")
     public TransferDTO transferMoney(@PathVariable("id") int sender, @RequestParam double amount, @RequestParam(name = "sendTo") int sendTo, @RequestBody Map<String, Object> obj) throws Exception {
-        Boolean validate = userService.validation(obj);      //validate user
+        Boolean validate = userService.validation(obj);
         if (validate) {
             return transactionService.transferMoney(sender, amount, sendTo);
         }
