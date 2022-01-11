@@ -28,7 +28,7 @@ public class MerchantDTO {
         this.phone = merchantEntity.getPhone();
         this.name = merchantEntity.getName();
         this.secretKey = merchantEntity.getSecretKey();
-        masterAccountId = merchantEntity.getId();
+        this.masterAccountId = merchantEntity.getMaId();
         List<UserAccountDTO> finalSettlement = new ArrayList<>();
         for (UserAccountEntity settlement : userAccountEntity) {
             UserAccountDTO eachUserAccount = new UserAccountDTO(settlement);
@@ -43,6 +43,6 @@ public class MerchantDTO {
         this.phone = merchantEntity.getPhone();
         this.name = merchantEntity.getName();
         this.secretKey = merchantEntity.getSecretKey();
-        masterAccountId = merchantEntity.getId();
+        this.masterAccountId = merchantEntity.getMaId();
     }
 }
