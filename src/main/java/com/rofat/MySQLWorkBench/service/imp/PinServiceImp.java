@@ -1,5 +1,6 @@
 package com.rofat.MySQLWorkBench.service.imp;
 
+import com.rofat.MySQLWorkBench.dto.PinCodeDTO;
 import com.rofat.MySQLWorkBench.exception.BadRequestException;
 import com.rofat.MySQLWorkBench.model.PinEntity;
 import com.rofat.MySQLWorkBench.repository.PinRepo;
@@ -9,6 +10,7 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,7 +23,7 @@ public class PinServiceImp implements PinService {
     private UserRepo userRepo;
 
     @Override
-    public PinEntity save(PinEntity pinEntity) {
+    public PinCodeDTO save(PinEntity pinEntity) {
         Boolean existsUser = userRepo.existsByUserId(pinEntity.getUserId());
         Boolean existsPin = pinRepo.existsByUserIdAndPinIsNotNull(pinEntity.getUserId());
         if (existsUser) {
@@ -30,7 +32,7 @@ public class PinServiceImp implements PinService {
                 String encryptedPassword = passwordEncryptor.encryptPassword(pinEntity.getPin());
                 pinEntity.setPin(encryptedPassword);
                 System.out.println("Pin is adding now");
-                return pinRepo.save(pinEntity);
+                return new PinCodeDTO(pinRepo.save(pinEntity)) ;
             }
             System.out.println("User and pin is existed ");
             throw new BadRequestException("Pin existed");
@@ -39,12 +41,18 @@ public class PinServiceImp implements PinService {
     }
 
     @Override
-    public PinEntity findByUserId(String id) {
-        return pinRepo.findPinByUserId(id);
+    public PinCodeDTO findByUserId(String id) {
+        return new PinCodeDTO(pinRepo.findPinByUserId(id)) ;
     }
 
     @Override
-    public List<PinEntity> findAll() {
-        return pinRepo.findAll();
+    public List<PinCodeDTO> findAll() {
+        List<PinEntity> pinEntities=pinRepo.findAll();
+        List<PinCodeDTO> pinCodeDTO = new ArrayList<>();
+        for(PinEntity each:pinEntities)
+        {
+            pinCodeDTO.add(new PinCodeDTO(each));
+        }
+        return pinCodeDTO;
     }
 }

@@ -40,12 +40,12 @@ public class TransactionController {
     }
 
     @PutMapping("/transfer/{id}")   //Transfer Money
-    public TransferDTO transferMoney(@PathVariable("id") int sender, @RequestParam double amount, @RequestParam(name = "recAcc") int recAcc, @RequestBody Map<String, Object> obj) throws Exception {
+    public TransferDTO transferMoney(@PathVariable("id") int sender, @RequestParam double amount, @RequestParam(name = "sendTo") int sendTo, @RequestBody Map<String, Object> obj) throws Exception {
         String userId = (String) obj.get("userId");
         String userPin = (String) obj.get("userPin");
         Boolean validate = userService.validation(userId, userPin);      //validate user
         if (validate) {
-            return transactionService.transferMoney(sender, amount, recAcc);
+            return transactionService.transferMoney(sender, amount, sendTo);
         }
         return null;
     }

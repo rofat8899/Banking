@@ -4,7 +4,6 @@ import com.rofat.MySQLWorkBench.dto.UserContactDTO;
 import com.rofat.MySQLWorkBench.dto.UserDTO;
 import com.rofat.MySQLWorkBench.model.UserContactEntity;
 import com.rofat.MySQLWorkBench.model.UserEntity;
-import com.rofat.MySQLWorkBench.service.UserAccountService;
 import com.rofat.MySQLWorkBench.service.UserContactService;
 import com.rofat.MySQLWorkBench.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserAccountService userAccountService;
     @Autowired
     private UserContactService userContactService;
 
@@ -61,13 +58,6 @@ public class UserController {
     public UserContactDTO addUserContact(@RequestBody UserContactEntity userContact, @PathVariable("uid") Integer id) {
         userContact.setMaId(id);
         return userContactService.addUserContact(userContact);
-    }
-
-    @GetMapping("/validation")      //validate pin
-    public Boolean userValidation(@RequestBody Map<String, Object> obj) {
-        String userId = (String) obj.get("userId");
-        String userPin = (String) obj.get("userPin");
-        return userService.validation(userId, userPin);
     }
 
     //Set Default Account
