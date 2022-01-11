@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Table(name = "SECURITY")
-public class SecurityEntity {
+public class SecureCodeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="SECURITY_ID")

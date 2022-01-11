@@ -7,4 +7,7 @@ import lombok.Setter;
 @Setter
 public class ResponseMessageDTO {
     private String message;
+    public ResponseMessageDTO(String message){
+        this.message=message;
+    }
 }

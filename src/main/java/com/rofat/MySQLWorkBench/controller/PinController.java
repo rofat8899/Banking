@@ -42,8 +42,6 @@ public class PinController {
 
     @GetMapping("/validation")      //validate pin
     public ResponseMessageDTO userValidation(@RequestBody Map<String, Object> obj) {
-        String userId = (String) obj.get("userId");
-        String userPin = (String) obj.get("userPin");
         return pinService.validatePinCode(obj);
     }
 }

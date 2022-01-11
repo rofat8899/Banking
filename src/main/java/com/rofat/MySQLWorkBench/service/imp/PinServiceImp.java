@@ -7,6 +7,7 @@ import com.rofat.MySQLWorkBench.model.PinEntity;
 import com.rofat.MySQLWorkBench.repository.PinRepo;
 import com.rofat.MySQLWorkBench.repository.UserRepo;
 import com.rofat.MySQLWorkBench.service.PinService;
+import com.rofat.MySQLWorkBench.service.UserService;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,8 @@ import java.util.Map;
 @Service
 public class PinServiceImp implements PinService {
 
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private PinRepo pinRepo;
     @Autowired
@@ -60,6 +62,11 @@ public class PinServiceImp implements PinService {
 
     @Override
     public ResponseMessageDTO validatePinCode(Map<String,Object> obj) {
-        return null;
+        if(userService.validation(obj)){
+            return new ResponseMessageDTO("Success");
+        }
+        else{
+            return new ResponseMessageDTO("failed");
+        }
     }
 }
