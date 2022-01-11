@@ -29,7 +29,7 @@ public class SecureCodeServiceImp implements SecureCodeService {
     private UserService userService;
 
     @Override
-    public SecureCodeDTO generateSecurityCode(Map<String,Object> obj) {
+    public SecureCodeDTO generateSecurityCode(Map<String, Object> obj) {
         String userId = (String) obj.get("userId");
         Boolean validate = userService.validation(obj);
         UserEntity user = userRepo.getUserByUserId(userId);
@@ -55,7 +55,7 @@ public class SecureCodeServiceImp implements SecureCodeService {
                 secureCodeEntity.setCreatedOn(existed_security.getCreatedOn());
                 secureCodeEntity.setCreatedBy(existed_security.getCreatedBy());
                 System.out.format("You successfully regenerated the code !\nYour new security code is %d\n", ranNum);
-                return new SecureCodeDTO(securityCode,securityRepo.save(secureCodeEntity));
+                return new SecureCodeDTO(securityCode, securityRepo.save(secureCodeEntity));
             } else {
                 secureCodeEntity.setSecurityCode(encryptedPassword);
                 secureCodeEntity.setUserId(user.getUserId());
@@ -64,25 +64,22 @@ public class SecureCodeServiceImp implements SecureCodeService {
                 secureCodeEntity.setCreatedOn(datetime);
                 secureCodeEntity.setCreatedBy(user.getName());
                 System.out.format("You successfully generated the code !\nYour security code is %d\n", ranNum);
-                return new SecureCodeDTO(securityCode,securityRepo.save(secureCodeEntity));
+                return new SecureCodeDTO(securityCode, securityRepo.save(secureCodeEntity));
             }
-
         }
         return null;
     }
 
     @Override
-    public ResponseMessageDTO validateSecureCode(Map<String,Object> obj) {
-       if(validate(obj)){
-           return new ResponseMessageDTO("success");
-       }
-       else{
-           return new ResponseMessageDTO("failed to validate the code");
-       }
+    public ResponseMessageDTO validateSecureCode(Map<String, Object> obj) {
+        if (validate(obj)) {
+            return new ResponseMessageDTO("success");
+        } else {
+            return new ResponseMessageDTO("failed to validate the code");
+        }
     }
 
-
-    private Boolean validate (Map<String,Object> obj){
+    private Boolean validate(Map<String, Object> obj) {
         String userId = (String) obj.get("userId");
         String code = (String) obj.get("code");
         Boolean existsUser = userRepo.existsByUserId(userId);
@@ -121,7 +118,6 @@ public class SecureCodeServiceImp implements SecureCodeService {
         } else {
             System.out.println("Please check your code or user ID again.");
         }
-
         return false;
     }
 

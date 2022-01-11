@@ -23,44 +23,37 @@ public class DataController {
     @Autowired
     private DataService dataService;
 
-    //Get all Merchant
     @GetMapping("/merchant")
     public List<MerchantDTO> getAllMerchant() {
         return merchantService.getAllMerchant();
     }
 
-    //Insert Merchant
     @PostMapping("/merchant")
     public MerchantDTO addMerchant(@RequestBody MerchantEntity merchantEntity) {
         return merchantService.addMerchant(merchantEntity);
     }
 
-    //Find Merchant by Master ID
     @GetMapping("/merchant/{id}")
     public MerchantDTO getMerchantByMasterId(@PathVariable("id") int id) {
         return merchantService.getMerchantByMasterId(id);
     }
 
-    //Get all Promotion
     @GetMapping("/promotion")
     public List<PromotionDTO> getAllPromotions() {
         return promotionService.getAllPromotion();
     }
 
-    //Insert Promotions with Master ID
     @PostMapping("/promotion/{id}")
     public PromotionDTO insertPromotions(@PathVariable("id") int maId, @RequestBody PromotionsEntity promotionsEntity) {
         promotionsEntity.setMaid(maId);
         return promotionService.save(promotionsEntity);
     }
 
-    //Get Promotion By Master ID
     @GetMapping("/promotion/{id}")
     public List<PromotionDTO> getPromotionByMasterId(@PathVariable("id") int maid) {
         return promotionService.findByMasterId(maid);
     }
 
-    //Get Data by master ID
     @GetMapping("{mid}")
     public DataDTO getDataByMasterId(@PathVariable("mid") int mid) {
         return dataService.getDataByMasterId(mid);

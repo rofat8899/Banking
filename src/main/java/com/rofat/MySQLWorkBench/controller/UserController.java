@@ -24,17 +24,17 @@ public class UserController {
     @Autowired
     private UserContactService userContactService;
 
-    @GetMapping()               //Get All Users
+    @GetMapping()
     public List<UserDTO> getAllUsers() {
         return userService.getAllUser();
     }
 
-    @PostMapping()              //Insert User
+    @PostMapping()
     public UserDTO addUser(@RequestBody UserEntity user) {
         return userService.addUser(user);
     }
 
-    @GetMapping("/{id}")          //Get User By Master Account ID
+    @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserByMasterAccId(@PathVariable Integer id) {
         try {
             UserDTO user = userService.getUserByMasterAccId(id);
@@ -44,7 +44,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/uid/{id}")          //Get User By UserID
+    @GetMapping("/uid/{id}")
     public ResponseEntity<UserDTO> getUserByUserId(@PathVariable String id) {
         try {
             UserDTO user = userService.getUserByUserId(id);
@@ -54,13 +54,12 @@ public class UserController {
         }
     }
 
-    @PostMapping("/contact/{uid}")              //Insert User Contact with Master Account ID
+    @PostMapping("/contact/{uid}")
     public UserContactDTO addUserContact(@RequestBody UserContactEntity userContact, @PathVariable("uid") Integer id) {
         userContact.setMaId(id);
         return userContactService.addUserContact(userContact);
     }
 
-    //Set Default Account
     @PostMapping("/account/default")
     public UserDTO setDefaultAccount(@RequestBody Map<String, Object> obj) {
         int maId = (int) obj.get("maId");

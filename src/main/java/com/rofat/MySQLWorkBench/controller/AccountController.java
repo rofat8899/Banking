@@ -23,7 +23,7 @@ public class AccountController {
         return userAccountService.getAllUserAccount();
     }
 
-    @GetMapping("/{id}")          //Get User By Master Account ID
+    @GetMapping("/{id}")
     public List<UserAccountDTO> getUserAccountByMasterAccId(@PathVariable Integer id) {
         return userAccountService.getUserAccountByMasterAccId(id);
     }
@@ -34,16 +34,14 @@ public class AccountController {
         return userAccountApproveService.addOrUpdateUserAccountApprove_(userAccountApprove);
     }
 
-    @PutMapping("/{id}")        //Delete User Account
+    @PutMapping("/{id}")
     public String deleteUserAccount(@PathVariable("id") Integer accountNumber) {
         userAccountService.deleteUserAccount(accountNumber);
         return "Successfully deleted";
     }
 
-    @GetMapping("/activate/{id}") //Activate User Account
+    @GetMapping("/activate/{id}")
     public UserAccountDTO activateUserAccount(@RequestBody Map<String, Object> obj, @PathVariable("id") int accountNumber) {
-
-
         return userAccountApproveService.activateUserAccount(obj, accountNumber);
     }
 

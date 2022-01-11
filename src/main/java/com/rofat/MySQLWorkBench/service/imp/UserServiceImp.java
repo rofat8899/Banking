@@ -28,9 +28,8 @@ public class UserServiceImp implements UserService {
 
     @Override
     public List<UserDTO> getAllUser() {
-        List<UserDTO> userDTO= new ArrayList<>();
-        for(UserEntity each: userRepo.findAll())
-        {
+        List<UserDTO> userDTO = new ArrayList<>();
+        for (UserEntity each : userRepo.findAll()) {
             userDTO.add(new UserDTO(each));
         }
         return userDTO;
@@ -57,7 +56,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Boolean validation(Map<String,Object> obj) {
+    public Boolean validation(Map<String, Object> obj) {
         String id = (String) obj.get("userId");
         String pin = (String) obj.get("userPin");
         Boolean existsUser = userRepo.existsByUserId(id); //check if database containing user or not
@@ -81,7 +80,7 @@ public class UserServiceImp implements UserService {
     public UserDTO setDefaultAccount(int maId, int defaultAccount) {
         UserEntity user = userRepo.getUserByMaId(maId);
         user.setDefaultAccount(defaultAccount);
-        return new UserDTO( userRepo.save(user));
+        return new UserDTO(userRepo.save(user));
     }
 
     @Override

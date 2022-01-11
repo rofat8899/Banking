@@ -17,7 +17,7 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @GetMapping("")
-    public PaymentDTO payment(@RequestBody Map<String,Object> request) throws Exception {
-       return paymentService.payment(request);
+    public PaymentDTO payment(@RequestBody Map<String, Object> request) throws Exception {
+        return paymentService.payment(request);
     }
 }
