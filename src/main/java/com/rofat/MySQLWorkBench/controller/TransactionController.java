@@ -1,7 +1,7 @@
 package com.rofat.MySQLWorkBench.controller;
 
+import com.rofat.MySQLWorkBench.dto.AccountBalanceDTO;
 import com.rofat.MySQLWorkBench.dto.TransferDTO;
-import com.rofat.MySQLWorkBench.dto.UserAccountDTO;
 import com.rofat.MySQLWorkBench.service.TransactionService;
 import com.rofat.MySQLWorkBench.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class TransactionController {
     private UserService userService;
 
     @PutMapping("/cashout/{id}")    //Cash Out
-    public UserAccountDTO cashOut(@PathVariable("id") int accNum, @RequestParam double amount, @RequestBody Map<String, Object> obj) {
+    public AccountBalanceDTO cashOut(@PathVariable("id") int accNum, @RequestParam double amount, @RequestBody Map<String, Object> obj) {
         String userId = (String) obj.get("userId");
         String userPin = (String) obj.get("userPin");
         Boolean validate = userService.validation(userId, userPin);      //validate user
@@ -29,7 +29,7 @@ public class TransactionController {
     }
 
     @PutMapping("/cashin/{id}")     //Cash In
-    public UserAccountDTO cashIn(@PathVariable("id") int accNum, @RequestParam double amount, @RequestBody Map<String, Object> obj) {
+    public AccountBalanceDTO cashIn(@PathVariable("id") int accNum, @RequestParam double amount, @RequestBody Map<String, Object> obj) {
         String userId = (String) obj.get("userId");
         String userPin = (String) obj.get("userPin");
         Boolean validate = userService.validation(userId, userPin);      //validate user

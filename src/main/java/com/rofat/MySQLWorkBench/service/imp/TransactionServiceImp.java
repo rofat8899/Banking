@@ -2,8 +2,8 @@ package com.rofat.MySQLWorkBench.service.imp;
 
 import com.rofat.MySQLWorkBench.constant.CurrencyType;
 import com.rofat.MySQLWorkBench.constant.TransactionType;
+import com.rofat.MySQLWorkBench.dto.AccountBalanceDTO;
 import com.rofat.MySQLWorkBench.dto.TransferDTO;
-import com.rofat.MySQLWorkBench.dto.UserAccountDTO;
 import com.rofat.MySQLWorkBench.model.TransactionEntity;
 import com.rofat.MySQLWorkBench.model.UserAccountEntity;
 import com.rofat.MySQLWorkBench.model.UserEntity;
@@ -42,12 +42,20 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override
-    public UserAccountDTO cashOutUsr(int accNum, double amount, boolean isTransfer) {
+    public AccountBalanceDTO cashOutUsr(int accNum, double amount, boolean isTransfer) {
+        if(cashOut(accNum, amount, isTransfer))
+        {
+            return new AccountBalanceDTO(userAccRepo.getUserAccountByAccountNumber(accNum));
+        }
         return null;
     }
 
     @Override
-    public UserAccountDTO cashInUsr(int accNum, double amount, boolean isTransfer) {
+    public AccountBalanceDTO cashInUsr(int accNum, double amount, boolean isTransfer) {
+        if(cashIn(accNum, amount, isTransfer))
+        {
+            return new AccountBalanceDTO(userAccRepo.getUserAccountByAccountNumber(accNum));
+        }
         return null;
     }
 
