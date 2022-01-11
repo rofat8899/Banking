@@ -14,13 +14,14 @@ public class SecureCodeController {
     @Autowired
     private SecureCodeService secureCodeService;
 
-    @PostMapping()
+    @PostMapping("/generate")
     public SecureCodeDTO generateSecurcode(@RequestBody Map<String, Object> obj) {
         return secureCodeService.generateSecurityCode(obj);
     }
 
-    @GetMapping()
+    @GetMapping("/validate")
     public ResponseMessageDTO validateSecureCode(@RequestBody Map<String, Object> obj) {
         return secureCodeService.validateSecureCode(obj);
     }
+
 }

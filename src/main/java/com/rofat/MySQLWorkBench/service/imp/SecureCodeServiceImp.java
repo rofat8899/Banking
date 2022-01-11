@@ -80,6 +80,8 @@ public class SecureCodeServiceImp implements SecureCodeService {
            return new ResponseMessageDTO("failed to validate the code");
        }
     }
+
+
     private Boolean validate (Map<String,Object> obj){
         String userId = (String) obj.get("userId");
         String code = (String) obj.get("code");
